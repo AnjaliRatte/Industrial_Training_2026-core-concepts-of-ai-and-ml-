@@ -1,10 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Day 2 (2 July, 2026)</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
+
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
 </head>
+
 <body>
 
+<header>
+    <h1>🌸 Day 2 - API Data Extraction and file handling </h1>
+    <p>Industrial Training Report</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>📌 Overview</h2>
+        <p>
+            On the second day of industrial training, I learned about working with APIs and handling data received from online resources. I explored how to send HTTP requests using Python and extract useful information from JSON responses. I practiced fetching exchange rate data from an API and displaying required details such as base currency, target currency, exchange rate, update time, and API status.
+
+I also learned how to download images from URLs using Python and save them locally with proper file handling techniques. Various real-world API-based tasks were performed, including fetching product details, extracting image URLs, downloading thumbnail images, and organizing downloaded files. I implemented data filtering techniques by downloading images based on specific conditions such as image size and Pokémon weight.
+
+These tasks helped me understand practical applications of APIs, JSON parsing, file handling, and automation using Python.  </p>
+    </div>
+
+    <div class="card">
+        <h2>🧠 Skills Learned</h2>
+        <span class="tag">API Handling</span>
+        <span class="tag">JSON Parsing</span>
+        <span class="tag">Nested Loops</span>
+        <span class="tag">Data Extraction</span>
+        <span class="tag">File Handling</span>
+        <span class="tag">Python libraries</span>
+    </div>
+
+    <div class="card">
+        <h2>Fetching and Displaying Currency Exchange Rate Details Using API</h2>
+        <p>To fetch currency exchange rate information from an online API and display required details such as base currency, selected currency, exchange rate, last updated time, and API status.</p>
+
+        <h3>💻 Code</h3>
+<pre>
+import requests
+
+response = requests.get("https://open.er-api.com/v6/latest/USD")
+data = response.json()
+
+target_currency = input("Enter Target currency : ")
+
+base_currency = data["base_code"]
+
+exchange_rate = data["rates"][target_currency]
+print("Base Currency : ", base_currency)
+print("Target Currency : ", target_currency)
+print("Exchange Rate : ",exchange_rate )
+
+
+
+</pre>
+
+<h3>📊 Output</h3>
+<pre>
+E:\PycharmProjects\Industrial_Training_2026\.venv\Scripts\python.exe "E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 2\2.1.py"
+Enter Target currency : INR
+Base Currency :  USD
+Target Currency :  INR
+Exchange Rate :  95.047522
+
+Process finished with exit code 0
+</pre>
+
+</div>
+    </div>
+
+    <div class="card">
+        <h2>Downloading an Image from a URL Using Python</h2>
+        <p>To download an image from an online URL and save it locally using Python file handling.</p>
+
+        <h3>💻 Code</h3>
+<pre>
+
+url = "https://assets.farmsanctuary.org/content/uploads/2021/12/28124545/2021_04-28_FSNY_Rad_Dobie_Milo_and_Macka_ducks_DSC_3972_CREDIT_Farm_Sanctuary-1600x1068.jpg"
+
+
+import requests
+
+response = requests.get(url)
+
+print(response)
+
+fn = "img.jpg"
+
+with open(fn,"wb") as f:
+    f.write(response.content)
+    f.close()
+</pre>
+
+<h3>📊 Output</h3>
+<pre>
+E:\PycharmProjects\Industrial_Training_2026\.venv\Scripts\python.exe "E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 2\2.2.py"
+<Response [200]>
+
+Process finished with exit code 0
+</pre>
+
+</div>
+
+    </div>
+
+    <div class="card">
+        <h2>Fetching Product Data and Downloading Thumbnail Images</h2>
+        <p>ETo fetch product details from an API, extract thumbnail image URLs, and download images using product names as filenames.</p>
+
+        <h3>💻 Code</h3>
+<pre>
+import requests
+
+response = requests.get("https://dummyjson.com/products")
+
+data = response.json()
+
+for item in data["products"] :
+    thumbnail = item["thumbnail"]
+    url = requests.get(thumbnail)
+    fn = item["title"] + ".webp"
+    # print(fn," , ",thumbnail)
+    with open(fn,"wb") as f:
+        f.write(url.content)
+        f.close()
+
+</pre>
+
+<h3>📊 Output</h3>
+<pre>
+E:\PycharmProjects\Industrial_Training_2026\.venv\Scripts\python.exe "E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 2\2.3.py"
+
+Process finished with exit code 0
+</pre>
+
+</div>
+
+    </div>
+
+    <div class="card">
+        <h2>Downloading Images According to Specific Conditions</h2>
+        <p>To fetch image data from an API and download only those images that satisfy given conditions.</p>
+
+    <h3>💻 Code</h3>
+<pre>
+import requests
+import os
+
+folder = "small images"
+os.makedirs(folder, exist_ok=True)
+
+response = requests.get("https://api.imgflip.com/get_memes")
+
+data = response.json()
+
+for info in data["data"]["memes"]:
+    if info["width"] < 400 :
+        img = info["url"]
+        r = requests.get(img)
+        fn = info["id"] + ".jpg"
+        file_path = os.path.join(folder,fn)
+        with open(file_path,"wb") as f :
+            f.write(r.content)
+            f.close()
+</pre>
+
+<h3>📊 Output</h3>
+<pre>
+E:\PycharmProjects\Industrial_Training_2026\.venv\Scripts\python.exe "E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 2\2.4.py"
+
+Process finished with exit code 0
+</pre>
+
+</div>
+
+    </div>
+
+    <div class="card">
+        <h2>Extracting Pokémon Details and Downloading Images Based on Weight</h2>
+        <p>To retrieve Pokémon information from an API, extract details, and download images of Pokémon satisfying a specific weight condition.</p>
+
+    <h3>💻 Code</h3>
+<pre>
+import requests
+
+response = requests.get("https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0")
+data = response.json()
+print("pokemons with weight less than 80 kg are : ")
+for item in data["results"]:
+    url = item["url"]
+    name = item["name"]
+    dino_info = requests.get(url)
+    dino_data = dino_info.json()
+    # print(dino_data["weight"])
+    if dino_data["weight"] < 80 :
+        print(name,url)
+        img = requests.get(dino_data["sprites"]["front_default"])
+        fn = name + ".png"
+        with open(fn,"wb") as f :
+            f.write(img.content)
+            f.close()
+
+</pre>
+
+<h3>📊 Output</h3>
+<pre>
+E:\PycharmProjects\Industrial_Training_2026\.venv\Scripts\python.exe "E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 2\2.5.py"
+pokemons with weight less than 80 kg are :
+bulbasaur https://pokeapi.co/api/v2/pokemon/1/
+caterpie https://pokeapi.co/api/v2/pokemon/10/
+weedle https://pokeapi.co/api/v2/pokemon/13/
+pidgey https://pokeapi.co/api/v2/pokemon/16/
+rattata https://pokeapi.co/api/v2/pokemon/19/
+spearow https://pokeapi.co/api/v2/pokemon/21/
+ekans https://pokeapi.co/api/v2/pokemon/23/
+pikachu https://pokeapi.co/api/v2/pokemon/25/
+nidoran-f https://pokeapi.co/api/v2/pokemon/29/
+clefairy https://pokeapi.co/api/v2/pokemon/35/
+jigglypuff https://pokeapi.co/api/v2/pokemon/39/
+zubat https://pokeapi.co/api/v2/pokemon/41/
+oddish https://pokeapi.co/api/v2/pokemon/43/
+paras https://pokeapi.co/api/v2/pokemon/46/
+diglett https://pokeapi.co/api/v2/pokemon/50/
+meowth https://pokeapi.co/api/v2/pokemon/52/
+bellsprout https://pokeapi.co/api/v2/pokemon/69/
+weepinbell https://pokeapi.co/api/v2/pokemon/70/
+magnemite https://pokeapi.co/api/v2/pokemon/81/
+shellder https://pokeapi.co/api/v2/pokemon/90/
+gastly https://pokeapi.co/api/v2/pokemon/92/
+haunter https://pokeapi.co/api/v2/pokemon/93/
+krabby https://pokeapi.co/api/v2/pokemon/98/
+exeggcute https://pokeapi.co/api/v2/pokemon/102/
+cubone https://pokeapi.co/api/v2/pokemon/104/
+koffing https://pokeapi.co/api/v2/pokemon/109/
+ditto https://pokeapi.co/api/v2/pokemon/132/
+eevee https://pokeapi.co/api/v2/pokemon/133/
+omanyte https://pokeapi.co/api/v2/pokemon/138/
+dratini https://pokeapi.co/api/v2/pokemon/147/
+mew https://pokeapi.co/api/v2/pokemon/151/
+chikorita https://pokeapi.co/api/v2/pokemon/152/
+cyndaquil https://pokeapi.co/api/v2/pokemon/155/
+sentret https://pokeapi.co/api/v2/pokemon/161/
+pichu https://pokeapi.co/api/v2/pokemon/172/
+cleffa https://pokeapi.co/api/v2/pokemon/173/
+igglybuff https://pokeapi.co/api/v2/pokemon/174/
+togepi https://pokeapi.co/api/v2/pokemon/175/
+togetic https://pokeapi.co/api/v2/pokemon/176/
+natu https://pokeapi.co/api/v2/pokemon/177/
+mareep https://pokeapi.co/api/v2/pokemon/179/
+
+</pre>
+
+</div>
+
+    </div>
+
+
+    </div>
+
+    <div class="card">
+        <h2>📊 Conclusion</h2>
+        <p>
+            During the second day of industrial training, I learned practical implementation of APIs, JSON data handling, and file operations using Python. The tasks improved my understanding of data extraction, automation, and real-world applications of Python programming.
+        </p>
+    </div>
+
+    <a href="../index.html">⬅ Back to Home</a>
+
+</div>
+
 </body>
+
 </html>
