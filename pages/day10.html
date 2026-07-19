@@ -1,0 +1,219 @@
+<header>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
+
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
+    <h1> Day 10 - Infinite Scroll Handling & E-Commerce Deep Data Extraction</h1>
+    <p>Industrial Training Diary</p>
+</header>
+
+<div class="container">
+
+    <!-- Introduction -->
+    <section class="card">
+        <h2> Introduction</h2>
+        <p>
+            On the tenth day of industrial training, I advanced my web scraping skills by tackling two common challenges in e-commerce websites: infinite scroll behaviors and nested deep data harvesting under strong anti-scraping blocks. Using <span class="code-block">Selenium WebDriver</span>, I implemented automated browser control workflows. I used JavaScript window execution to dynamically scroll through pages to trigger content lazy-loading, and created deep multi-tiered loops to crawl inner product profiles. These exercises were helpful in demonstrating how modern front-end architectures load content dynamically and how automated scripts can simulate human actions to successfully parse text data.
+        </p>
+    </section>
+
+    <!-- Learning Objectives -->
+    <section class="card">
+        <h2> Learning Objectives</h2>
+        <ul>
+            <li>Handle lazy-loaded elements by running window scroll script snippets</li>
+            <li>Implement dynamic mathematical logic offsets to control incremented scrolling paths</li>
+            <li>Extract text values cleanly using the structured parameter <span class="code-block">get_text(strip=True)</span></li>
+            <li>Slice structured zip sequences using index boundaries to manage limit constraints safely</li>
+            <li>Navigate multi-tiered link trees to extract product descriptions, prices, and branding parameters</li>
+            <li>Identify and document server response behaviors (such as access denials and anti-scraping firewalls)</li>
+        </ul>
+    </section>
+
+    <!-- Activity 1 -->
+    <section class="card">
+        <h2> Activity 1: Automated Window Scrolling and Extraction Pipeline (JioMart Large Appliances)</h2>
+        <p>
+            Automate a browser session targeting the JioMart store page, execute a mathematical increment sequence loop to dynamically scroll down the viewport to trigger content rendering, and harvest the loaded Product Titles and Prices.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Execute window scrolling operations utilizing the <span class="code-block">driver.execute_script()</span> driver method</li>
+            <li>Establish mathematical loop parameters to progressively shift view ranges down by 500 pixels every 3 seconds</li>
+            <li>Extract clean dataset elements by targeting product card containers with BeautifulSoup</li>
+            <li>Use slice limits (<span class="code-block">[:100]</span>) to structure the output matrix and print bounded item summaries</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+from bs4 import BeautifulSoup
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+# Initialize web driver components
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+url = "https://www.jiomart.com/sections/large-appliances"
+
+driver.get(url)
+time.sleep(20) # Safe buffer delay for complete core component initialization
+
+# Initialize scrolling coordinate tracking variables
+x = 0
+y = 500
+for i in range(5):
+    # Dynamically scroll window perspective down the layout
+    driver.execute_script("window.scrollTo(" + str(x) + ", " + str(y) + ");")
+    x = y
+    y = y + 500
+    time.sleep(3) # Wait for newly scrolled elements to render onto DOM
+
+soup = BeautifulSoup(driver.page_source, "html.parser")
+title = soup.find_all("h3", class_="productCard__productTitle")
+price = soup.find_all("span", class_="PriceContainer__currentPrice")
+print(len(title), len(price))
+
+result = []
+# Match listings and slice down to target limit
+for t, p in list(zip(title, price))[:100]:
+    result.append([t.get_text(strip=True), p.get_text(strip=True)])
+
+print(result)
+print(len(result))
+driver.quit()
+</pre>
+    </section>
+
+    <!-- Activity 2 -->
+    <section class="card">
+        <h2> Activity 2: Multi-Tier Product Catalog Harvesting (Ajio Caps & Hats Catalog)</h2>
+        <p>
+            Automate search results parsing for fashion accessories by mapping item lists, querying individual child links, and attempting to extract Product Names, Sale Prices, Brand Names, MRPs, and Description sections.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Locate product card wrappers using grid layout styling markers</li>
+            <li>Reconstruct item absolute links and save them inside tracking loops</li>
+            <li>Navigate deep child addresses using the same automated browser instance</li>
+            <li>Extract descriptive specifications (such as names, tags, and descriptive blocks) into data rows</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import time
+from selenium import webdriver
+from bs4 import BeautifulSoup
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+
+url = "https://www.ajio.com/s/caps-and-hats-4461-75481"
+driver.get(url)
+time.sleep(5)
+
+soup = BeautifulSoup(driver.page_source, "html.parser")
+products = soup.find_all("a", {"class": "rilrtl-products-list__link desktop"})
+
+# Gather independent listing links
+items = []
+for p in products:
+    items.append("https://www.ajio.com" + p.get("href"))
+
+result = []
+for item in items:
+    driver.get(item)
+    time.sleep(5) # Delay buffer to allow inner item values to safely load
+
+    sp = BeautifulSoup(driver.page_source, "html.parser")
+
+    # Extract details using descriptive class tags
+    name = sp.find("h1", class_="prod-name").text
+    sale_price = sp.find("div", class_="prod-sp").text
+    brand = sp.find("h2", class_="brand-name").text
+    mrp = sp.find("span", class_="prod-cp").text
+    prod_details = sp.find("section", class_="prod-desc") # Captures description block element
+
+    result.append([name, sale_price, brand, mrp, prod_details])
+
+print(result)
+driver.quit()
+</pre>
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="card">
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>How to run JavaScript window scrolling methods to load elements on infinite scroll websites</li>
+            <li>Using incremental page coordinate shifting to smoothly trigger data loading hooks</li>
+            <li>Using the <span class="code-block">get_text(strip=True)</span> formatting method to instantly clean up white space</li>
+            <li>Using list slicing combinations (<span class="code-block">[:100]</span>) to set clean boundaries on collected datasets</li>
+            <li>Observing browser access limitations and dealing with real-world website protection layers</li>
+        </ul>
+    </section>
+
+</div>

@@ -1,0 +1,311 @@
+<header>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
+
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
+    <h1> Day 7 - Web Scraping & Data Extraction using BeautifulSoup</h1>
+    <p>Industrial Training Diary</p>
+</header>
+
+<div class="container">
+
+    <!-- Introduction -->
+    <section class="card">
+        <h2> Introduction</h2>
+        <p>
+            On the seventh day of industrial training, I learned the basics of Web Scraping using Python. Web scraping is a technique used to extract data from websites automatically. I used the <span class="code-block">requests</span> library to download HTML content from web pages and the <span class="code-block">BeautifulSoup</span> library from <span class="code-block">bs4</span> to parse the HTML and find specific tags, classes, and attributes. I completed multiple practical tasks, including scraping Wikipedia headers, downloading country names and flag images, extracting famous quotes with their authors, and scraping professional details from a job portal. These tasks helped me understand how to target HTML elements and download web data efficiently.
+        </p>
+    </section>
+
+    <!-- Learning Objectives -->
+    <section class="card">
+        <h2> Learning Objectives</h2>
+        <ul>
+            <li>Understand the basics of Web Scraping</li>
+            <li>Use <span class="code-block">requests</span> with custom User-Agent headers</li>
+            <li>Parse HTML structure using BeautifulSoup</li>
+            <li>Find tags using <span class="code-block">find()</span> and <span class="code-block">find_all()</span></li>
+            <li>Extract specific attributes like <span class="code-block">src</span> and <span class="code-block">class</span></li>
+            <li>Download and save image files locally from external links</li>
+            <li>Clean scraped text data using <span class="code-block">.strip()</span> and text formatting</li>
+        </ul>
+    </section>
+
+    <!-- Activity 1 -->
+    <section class="card">
+        <h2> Activity 1: Wikipedia Page Scraping (Heading and Subheadings)</h2>
+        <p>
+            Fetch the Wikipedia page for the "Flag of India", extract the main page heading (<span class="code-block">&lt;h1&gt;</span>), and list out all the subheadings (<span class="code-block">&lt;h2&gt;</span>) present on the page.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Send a GET request to Wikipedia using custom headers to avoid bot detection</li>
+            <li>Extract the main title using <span class="code-block">soup.find("h1")</span></li>
+            <li>Extract all secondary sections using <span class="code-block">soup.find_all("h2")</span> and print their text</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://en.wikipedia.org/wiki/Flag_of_India"
+
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+result = requests.get(url, headers=headers)
+data = result.content
+
+soup = BeautifulSoup(data, 'html.parser')
+
+# Get main heading
+heading = soup.find("h1")
+print(heading.text)
+
+# Get all subheadings
+sh = soup.find_all("h2")
+for h in sh:
+    print(h.text)
+</pre>
+    </section>
+
+    <!-- Activity 2 -->
+    <section class="card">
+        <h2> Activity 2: Extracting Country Names from Worldometers</h2>
+        <p>
+            Scrape the Worldometers flags webpage to extract and print the names of all countries listed.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Fetch the webpage content from the given URL</li>
+            <li>Find all <span class="code-block">&lt;span&gt;</span> elements that have the class <span class="code-block">"font-bold"</span></li>
+            <li>Loop through the elements and display the clean text names of the countries</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://www.worldometers.info/geography/flags-of-the-world/"
+
+result = requests.get(url)
+data = result.content
+soup = BeautifulSoup(data , "html.parser")
+
+# Find country names using class filter
+country_names = soup.find_all("span", class_="font-bold")
+for country in country_names:
+    print(country.text)
+</pre>
+    </section>
+
+    <!-- Activity 3 -->
+    <section class="card">
+        <h2> Activity 3: Downloading Country Flag Images</h2>
+        <p>
+            Scrape the flag page to extract both country names and image links, create individual folders for each country name, and download their respective flag image files into those folders.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Extract country text and matching image tags from the webpage</li>
+            <li>Create absolute image URLs by joining the base domain name</li>
+            <li>Use <span class="code-block">os.mkdir()</span> to automatically generate a unique folder for each country</li>
+            <li>Download the image files in binary format (<span class="code-block">"wb"</span>) and save them locally</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+from bs4 import BeautifulSoup
+import os
+
+url = "https://www.worldometers.info/geography/flags-of-the-world/"
+
+result = requests.get(url)
+data = result.content
+soup = BeautifulSoup(data , "html.parser")
+
+c_names = soup.find_all("span", class_="font-bold")
+c_flags = soup.find_all("img")
+c_flags.pop(0) # Remove logo header image
+
+country_names = []
+for i in c_names:
+    country_names.append(i.text)
+
+country_flags = []
+for j in c_flags:
+    country_flags.append(j.get("src"))
+
+# Loop to create folders and save images
+for country, flag in zip(country_names, country_flags):
+    flag = "https://www.worldometers.info" + flag
+    country = country.replace(" ", "") # Remove spaces for folder name
+
+    path = os.path.join(os.getcwd(), country)
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    img = requests.get(flag)
+    img_path = os.path.join(path, country + ".webp")
+    with open(img_path, "wb") as f:
+        f.write(img.content)
+</pre>
+    </section>
+
+    <!-- Activity 4 -->
+    <section class="card">
+        <h2> Activity 4: Scraping Quotes and Authors</h2>
+        <p>
+            Target a quotes website to pull a list of famous sayings along with the respective authors who said them, storing the final pairs inside a list.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Locate quote text using <span class="code-block">"span"</span> tags with class <span class="code-block">"text"</span></li>
+            <li>Locate author names using <span class="code-block">"small"</span> tags with class <span class="code-block">"author"</span></li>
+            <li>Combine data points using <span class="code-block">zip()</span> and organize them into an index array</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+from bs4 import BeautifulSoup
+
+url = "http://quotes.toscrape.com/"
+data = requests.get(url).content
+soup = BeautifulSoup(data, "html.parser")
+
+quotes = soup.find_all("span", class_="text")
+authors = soup.find_all("small", class_="author")
+
+result = []
+for quote, author in zip(quotes, authors):
+    row = []
+    row.append(quote.text)
+    row.append(author.text)
+    result.append(row)
+
+print(result)
+</pre>
+    </section>
+
+    <!-- Activity 5 -->
+    <section class="card">
+        <h2> Activity 5: Job Portal Scraping (Fake Jobs Dataset)</h2>
+        <p>
+            Scrape a sample job portal website to gather four key elements: Job Title, Company Name, Location Address, and Date Posted. Save the gathered items inside structured dictionary logs.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Target specific HTML tags (<span class="code-block">h2</span>, <span class="code-block">h3</span>, <span class="code-block">p</span>, <span class="code-block">time</span>) with their matching styling classes</li>
+            <li>Clean text alignment values using the <span class="code-block">.strip()</span> method</li>
+            <li>Map attributes clearly into Key-Value format dictionaries and print them</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://realpython.github.io/fake-jobs/"
+data = requests.get(url).content
+
+soup = BeautifulSoup(data, "html.parser")
+
+# Find elements by specific classes
+job_title = soup.find_all("h2", class_="title is-5")
+company_name = soup.find_all("h3", class_="subtitle is-6 company")
+address = soup.find_all("p", class_="location")
+date = soup.find_all("time")
+
+result = []
+for jt, cn, a, d in zip(job_title, company_name, address, date):
+    row = {}
+    row["job title"] = jt.text
+    row["company name"] = cn.text
+    row["address"] = a.text.strip() # Clear whitespaces
+    row["date posted"] = d.text
+    result.append(row)
+
+# Print final job profiles
+for i in result:
+    print(i)
+</pre>
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="card">
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>How to download text and media data using HTTP requests</li>
+            <li>Parsing unstructured HTML structure into organized datasets</li>
+            <li>Targeting precise components using tags, IDs, and element class names</li>
+            <li>Downloading static binary files (.webp, .jpg) directly from target websites</li>
+            <li>Using list combinations (<span class="code-block">zip()</span>) and dictionaries to format gathered data neatly</li>
+        </ul>
+    </section>
+
+</div>

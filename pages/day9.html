@@ -1,0 +1,265 @@
+<header>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
+
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
+    <h1> Day 9 - Advanced Real Estate & Local Business Web Automation</h1>
+    <p>Industrial Training Diary</p>
+</header>
+
+<div class="container">
+
+    <!-- Introduction -->
+    <section class="card">
+        <h2> Introduction</h2>
+        <p>
+            On the ninth day of industrial training, I focused on extracting deep, multi-layered details from international real estate listings and directory networks. Building upon my knowledge of browser automation via <span class="code-block">Selenium WebDriver</span> and DOM parsing using <span class="code-block">BeautifulSoup</span>, I wrote scripts to handle highly specific structured data. For the real estate project, I scraped detailed property fields such as pricing, exact floor areas, layout parameters, structural timelines, and specific financial rules. For the business listings task, I targeted high-density index matrices to extract information on restaurant venues. These advanced implementations demonstrated the power of automated web mining for gathering deep business intelligence data.
+        </p>
+    </section>
+
+    <!-- Learning Objectives -->
+    <section class="card">
+        <h2> Learning Objectives</h2>
+        <ul>
+            <li>Extract complex target details via structured multi-page index loops</li>
+            <li>Parse list elements into ordered text strings using clean character splits</li>
+            <li>Map multi-layered page features into highly organized Python dictionaries</li>
+            <li>Clean scraped text data strings using text replacements (<span class="code-block">.replace()</span>) and spacing methods</li>
+            <li>Implement targeted browser wait loops for heavy JavaScript directory pages</li>
+            <li>Extract structural details safely from deeply nested HTML tables and tags</li>
+        </ul>
+    </section>
+
+    <!-- Activity 1 -->
+    <section class="card">
+        <h2> Activity 1: Comprehensive Property Specification Harvesting (FazWaz Thailand)</h2>
+        <p>
+            Automate the collection of Bangkok property listings, gather inner detail links, and extract an extended dictionary mapping containing 17 granular columns (including Sale Price, Project Name, Floor Count, Listed Date, CAM Fee, and Ownership parameters).
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Extract deep listing URLs securely from the main properties page grid layout</li>
+            <li>Collect block values sequentially using structural index mappings on repeating HTML class targets</li>
+            <li>Use <span class="code-block">" ".join(text.split())</span> to remove extra whitespaces from text lines</li>
+            <li>Map elements clearly into dynamic Key-Value tracking dictionaries</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+from selenium import webdriver
+from bs4 import BeautifulSoup
+import time
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+# Initialize browser components
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+url = "https://www.fazwaz.com/property-for-sale/thailand/bangkok?bedrooms=2+&ownership=3120"
+
+driver.get(url)
+time.sleep(5)
+
+soup = BeautifulSoup(driver.page_source, "html.parser")
+pr = soup.find_all("a", {"class": "link-unit"})
+
+properties = []
+for i in pr:
+    properties.append(i.get("href"))
+
+result = []
+for property in properties:
+    driver.get(property)
+    time.sleep(5)
+    sp = BeautifulSoup(driver.page_source, "html.parser")
+    p = {}
+
+    # Extract pricing details
+    sale_price = sp.find("div", {"class": "price-message"})
+    p["sale price "] = " ".join(sale_price.text.split())
+
+    try:
+        original_price = sp.find("small", {"class": "gallery-unit-sale-price__price-reduce"})
+        p["original price"] = " ".join(original_price.text.split())
+    except:
+        original_price = sp.find("div", {"class": "price-message"})
+        p["original price"] = " ".join(original_price.text.split())
+
+    # Extract location and metadata fields
+    address = sp.find("span", {"class": "project-location"})
+    p["address"] = " ".join(address.text.split())
+
+    project_name = sp.find("a", {"class": "project-information-info"})
+    p["project name "] = " ".join(project_name.text.split())
+
+    unit_id = sp.find("div", {"class": "unit-info-element__item"})
+    p["unit id "] = " ".join(unit_id.text.split())
+
+    # Parse structural specifications list elements
+    elements = sp.find_all("div", {"class": "property-info-element"})
+    lis = []
+    for i in elements:
+        j = i.text.split()
+        lis.append(" ".join(j))
+
+    p["bedrooms"] = lis[0]
+    p["bathrooms"] = lis[1]
+    p["size"] = lis[2]
+    p["floors"] = lis[3]
+    p["project completed on "] = lis[4]
+
+    # Parse basic information columns
+    a = sp.find_all("span", {"class": "basic-information-info"})
+    lis2 = []
+    for k in a:
+        i = k.text.split()
+        lis2.append(" ".join(i))
+
+    p["date listed"] = lis2[0]
+    p["last updated"] = lis2[1]
+    p["price/sqm"] = lis2[6]
+    p["furnished"] = lis2[9]
+    p["ownership"] = lis2[8]
+    p["campus fee"] = lis2[13]
+    p["listed by"] = lis2[14]
+    p["view"] = lis2[10]
+
+    print(p)
+    result.append(p)
+
+print(result)
+driver.quit()
+</pre>
+    </section>
+
+    <!-- Activity 2 -->
+    <section class="card">
+        <h2> Activity 2: Local Business Profile Extraction (Restaurant Guru Portugal)</h2>
+        <p>
+            Scrape a business directory portal using extended browser delays to bypass rendering bottlenecks, gather profile reference links, and build matrix rows of venue parameters containing Restaurant Name, Cuisine Category, and Street Address.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Implement a long delay (<span class="code-block">time.sleep(20)</span>) to ensure full index tree compilation</li>
+            <li>Isolate listing card anchor links using specific directory class tags</li>
+            <li>Clean raw outputs by stripping out line breaks (<span class="code-block">\n</span>) and extra space elements</li>
+            <li>Compile structural data lists into terminal tracking logs</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+from selenium import webdriver
+from bs4 import BeautifulSoup
+import time
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+url = "https://restaurantguru.com/restaurant-Portugal-t1"
+
+driver.get(url)
+time.sleep(20) # Safe delay time for complete network data loading
+
+soup = BeautifulSoup(driver.page_source, "html.parser")
+
+# Target specific local listing links
+links = soup.find_all("a", class_="notranslate title_url link link--secondary rest-card__link")
+ls = []
+for link in links:
+    ls.append(link.get("href"))
+
+result = []
+for l in ls:
+    driver.get(l)
+    time.sleep(5)
+    print(l)
+
+    sp = BeautifulSoup(driver.page_source, "html.parser")
+
+    # Extract clean specifications by removing layout formatting characters
+    name_clean = sp.find("h1", class_="notranslate").text.replace("\n", "")
+    cuisine_clean = sp.find("div", class_="cuisine_hidden").text.replace("\n", "").replace(" ", "")
+    address_clean = sp.find("div", class_="address").text.replace("\n", "").replace("Address", "").replace("                            ", " ")
+
+    result.append([name_clean, cuisine_clean, address_clean])
+    print(result)
+
+print(result)
+driver.quit()
+</pre>
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="card">
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>How to extract complex datasets containing dozens of granular fields per item</li>
+            <li>Using string split-join operations (<span class="code-block">" ".join(text.split())</span>) to clean up messy HTML spacing</li>
+            <li>Using try/except blocks to scrape content that might change layout from page to page</li>
+            <li>Using extended delay times to ensure heavy JavaScript elements load properly before parsing</li>
+            <li>Cleaning up target data structures using advanced text replacement chains</li>
+        </ul>
+    </section>
+
+</div>

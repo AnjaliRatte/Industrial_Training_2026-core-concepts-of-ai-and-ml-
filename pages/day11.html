@@ -1,0 +1,342 @@
+<header>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
+
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
+    <h1> Day 11 - Foundational Data Analysis & Manipulation with Pandas</h1>
+    <p>Industrial Training Diary</p>
+</header>
+
+<div class="container">
+
+    <!-- Introduction -->
+    <section class="card">
+        <h2> Introduction</h2>
+        <p>
+            On the eleventh day of industrial training, I transitioned into core Data Analysis and structural dataset manipulation using the Python <span class="code-block">pandas</span> library. In machine learning pipelines, raw data exploration and preprocessing are foundational stages. I wrote scripts to handle tabular files (TSV and CSV formats) fetched from local paths as well as external web repositories. Through these comprehensive exercises, I practiced key dataframe operations including data type inspections, target column renaming, row filtering, complex conditional lookups, explicit axis drops, and category grouping aggregates. These methods are crucial for cleaning and structuring raw attributes into actionable formats.
+        </p>
+    </section>
+
+    <!-- Learning Objectives -->
+    <section class="card">
+        <h2> Learning Objectives</h2>
+        <ul>
+            <li>Load and parse data from diverse files using specific column separation rules</li>
+            <li>Inspect structural profiles via shape attributes, data types, and index locations</li>
+            <li>Perform flexible renaming operations and explicit column/row drop configurations</li>
+            <li>Sort structural series arrays in ascending and descending priority lines</li>
+            <li>Filter datasets using vector conditional criteria and string queries</li>
+            <li>Manage numeric and non-numeric fields cleanly using data type selection exclusion rules</li>
+            <li>Compute analytical insights using value groupings and aggregation matrices</li>
+        </ul>
+    </section>
+
+    <!-- Activity 1 -->
+    <section class="card">
+        <h2> Activity 1: Food Evaluation Structural Exploration (OpenFoodFacts TSV)</h2>
+        <p>
+            Import a large tab-separated value dataset into a dataframe to examine its dimension layouts, specific index positions, dynamic column arrays, and structural tracking values.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Load structural TSV datasets using custom delimiter configurations (<span class="code-block">sep="\t"</span>)</li>
+            <li>Evaluate structural rows and columns using the dataframe shape property</li>
+            <li>Extract index titles and search column attributes using explicit array integers</li>
+            <li>Isolate structural properties using target location coordinates (<span class="code-block">.iloc</span> and <span class="code-block">.loc</span>)</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import pandas as pd
+
+# Load the tab-separated dataset into the food dataframe
+food = pd.read_csv("en.openfoodfacts.org.products.tsv", sep="\t", low_memory=False)
+
+# See the first 5 entries
+print(food.head())
+
+# Find the number of observations (rows) in the dataset
+print("no of observations : ", food.shape[0])
+
+# Find the number of columns in the dataset
+print("no of columns : ", food.shape[1])
+
+# Print the names of all the columns
+print(food.columns)
+
+# Get the name of the 105th column (Index 104)
+print(food.columns[104])
+
+# Find the observation data type of the 105th column
+print(food.iloc[:, 104].dtype)
+
+# Check how the dataset is indexed
+print(food.index)
+
+# Get the product name of the 19th observation (Index 18)
+print(food.loc[18, "product_name"])
+</pre>
+    </section>
+
+    <!-- Activity 2 -->
+    <section class="card">
+        <h2> Activity 2: User Profiles Demographic Aggregations (Markham Dataset)</h2>
+        <p>
+            Parse demographic user records from a web repository using explicit columns as active indexes, perform structural content evaluations, filter column series, and summarize values.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Initialize target dataframe indexes directly using named columns during the load routine</li>
+            <li>Evaluate target datasets using summary descriptions (<span class="code-block">.describe(include="all")</span>)</li>
+            <li>Extract unique occurrence totals and locate specific distribution maximum/minimum values</li>
+            <li>Compute demographic value averages from targeted numerical series columns</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import pandas as pd
+
+# Assign it to a variable called users and use 'user_id' as the index column
+users = pd.read_csv("https://raw.githubusercontent.com/justmarkham/DAT8/master/data/u.user", sep="|", index_col="user_id")
+
+# See the first 25 entries and the last 10 entries
+print(users.head(25))
+print(users.tail(10))
+
+# Find the number of observations and columns in the dataset
+print(users.shape[0])
+print(users.shape[1])
+
+# Print the column labels and index details
+print(users.columns)
+print(users.index)
+
+# Check the data type of each column
+print(users.dtypes)
+
+# Print only the occupation column
+print(users.loc[:, "occupation"])
+
+# Count how many different occupations are in this dataset
+print(users["occupation"].nunique())
+
+# Find the most frequent occupation value
+print(users["occupation"].value_counts().idxmax())
+
+# Summarize the entire DataFrame structure
+print(users.describe())
+
+# Summarize all the columns including categorical fields
+print(users.describe(include="all"))
+
+# Summarize only the occupation column
+print(users["occupation"].describe(include="all"))
+
+# Calculate the mean age of the users
+print(users["age"].mean())
+
+# Find the age value with the least occurrence frequency
+print(users["age"].value_counts().idxmin())
+</pre>
+    </section>
+
+    <!-- Activity 3 -->
+    <section class="card">
+        <h2> Activity 3: Diamond Parameters Advanced Structuring & Analytics (Seaborn Dataset)</h2>
+        <p>
+            Run multiple preprocessing, structural cleanup, and analytical grouping steps on a standard commercial diamond matrix to prepare it for machine learning analysis.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Modify column names dynamically using explicit replacement dictionaries</li>
+            <li>Perform single or multi-column drops using explicit drop axis configurations</li>
+            <li>Filter matching row lists using complex conditions and string query syntax methods</li>
+            <li>Exclude text fields dynamically using data type selections (<span class="code-block">select_dtypes</span>)</li>
+            <li>Apply grouped aggregations (<span class="code-block">.groupby()</span> and <span class="code-block">.agg()</span>) to generate target summaries</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import pandas as pd
+
+# Load the diamonds dataset from the web repository
+diamonds = pd.read_csv('https://raw.githubusercontent.com/mwaskom/seaborn-data/master/diamonds.csv')
+
+# 1. Read a csv file from a specified source and print the first 5 rows
+print(diamonds.head(5))
+
+# 2. Modify the default column labels and print the first 6 rows
+diamonds_renamed = diamonds.rename(columns={"carat":"CARAT","cut":"CUT","color":"COLOR","clarity":"CLARITY","depth":"DEPTH","table":"TABLE","price":"PRICE","x":'X','y':'Y','z':'Z'})
+print(diamonds_renamed.head(6))
+
+# 3. Select a specific series from the DataFrame and print its content
+serie = diamonds["carat"]
+print(serie)
+
+# 4. Find the number of rows, columns, and data type of each column
+print(diamonds.shape, diamonds.dtypes)
+
+# 5. Summarize only the 'object' (text) columns of the DataFrame
+print(diamonds.describe(include=["object"]))
+
+# 6. Rename two specific columns of the diamonds DataFrame
+diamonds = diamonds.rename(columns={"x": 'X', "y": 'Y'})
+print(diamonds.columns)
+
+# 7. Rename all columns of the DataFrame at once
+diamonds = diamonds.rename(columns={"carat":"CARAT","cut":"CUT","color":"COLOR","clarity":"CLARITY","depth":"DEPTH","table":"TABLE","price":"PRICE","X":'X','Y':'Y','z':'Z'})
+print(diamonds.head(6))
+
+# 8. Remove the second column of the diamonds DataFrame
+diamonds = diamonds.drop(columns=diamonds.columns[1])
+print(diamonds.columns)
+
+# 9. Remove multiple columns at once from the DataFrame
+diamonds = diamonds.drop(columns=[diamonds.columns[0], diamonds.columns[1], "TABLE"])
+
+# 10. Remove multiple rows at once using index boundaries (axis=0)
+diamonds = diamonds.drop(diamonds.index[:34], axis=0)
+print(diamonds.head())
+
+# Resetting dataset to verify sorting and filtering operations
+diamonds = pd.read_csv('https://raw.githubusercontent.com/mwaskom/seaborn-data/master/diamonds.csv')
+
+# 11. Sort the 'cut' Series in ascending order
+cut_series = diamonds["cut"].sort_values()
+print(cut_series)
+
+# 12. Sort the 'price' Series in descending order
+price_series = diamonds["price"].sort_values(ascending=False)
+print(price_series)
+
+# 13. Sort the entire DataFrame by the 'carat' Series in both orders
+print(diamonds.sort_values("carat"))
+print(diamonds.sort_values("carat", ascending=False))
+
+# 14. Filter rows to show only items with a carat weight of at least 0.3
+print(diamonds[diamonds["carat"] >= 0.3])
+
+# 15. Convert a basic Python list into a structured Pandas series
+ls = ['a', 'b', 'c', 1, 2, 3]
+print(pd.Series(ls))
+
+# 16. Find details of items using conditional coordinate size queries
+print(diamonds.query('x > 5 and y > 5 and z > 5'))
+
+# 17. Find items matching specific multiple category labels
+print(diamonds.query("cut == 'Ideal' or cut == 'Premium'"))
+print(diamonds.query("cut == 'Fair' or cut == 'Good' or cut == 'Premium'"))
+
+# 18. Display all current column labels of the DataFrame
+print(diamonds.columns)
+
+# 19. Read a specific row subset from the diamonds DataFrame
+print(diamonds[1:4])
+print(diamonds.iloc[3:6, :])
+
+# 20. Iterate through the elements of the DataFrame using nested loops
+for i in diamonds:
+    for j in range(min(5, len(diamonds[i]))): # Limited to 5 rows for log readability
+        print(diamonds[i][j])
+
+# 21. Drop all non-numeric columns from the diamonds DataFrame
+numeric_diamonds = diamonds.select_dtypes(include=["number"])
+print(numeric_diamonds.head())
+
+# 22. Drop numeric columns by selecting only object/string fields
+non_numeric_diamonds = diamonds.select_dtypes(exclude=["int64", "float64"])
+print(non_numeric_diamonds.head())
+
+# 23. Pass a list of data types to only describe matching columns
+dt = ["object", "float64"]
+print(diamonds.describe(include=dt))
+
+# 24. Calculate the statistical mean of each numeric column
+print(diamonds.mean(numeric_only=True))
+
+# 25. Calculate the statistical mean across each individual row
+print(diamonds.mean(axis=1, numeric_only=True))
+
+# 26. Calculate the average price for each category group cut
+print(diamonds.groupby("cut")["price"].mean())
+
+# 27. Calculate the total count, minimum, and maximum price for each cut group
+print(diamonds.groupby("cut")["price"].agg(["count", "min", "max"]))
+</pre>
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="card">
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>How to load and inspect tab-separated (TSV) and comma-separated (CSV) datasets using Pandas</li>
+            <li>Locating data structures accurately using index label lookups (<span class="code-block">.loc</span>) and coordinate vectors (<span class="code-block">.iloc</span>)</li>
+            <li>Modifying dataframe structures using explicit column renames and row/column drops</li>
+            <li>Filtering structural rows using complex boolean criteria and built-in text query evaluations</li>
+            <li>Separating text features from numerical columns using data type filtering parameters</li>
+            <li>Summarizing and aggregating datasets across multiple categories to extract analytical summaries</li>
+        </ul>
+    </section>
+
+</div>

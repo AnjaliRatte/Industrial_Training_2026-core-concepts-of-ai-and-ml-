@@ -1,0 +1,225 @@
+<header>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
+
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
+    <h1> Day 12 - Machine Learning Classification Pipeline & Model Benchmarking</h1>
+    <p>Industrial Training Diary</p>
+</header>
+
+<div class="container">
+
+    <!-- Introduction -->
+    <section class="card">
+        <h2> Introduction</h2>
+        <p>
+            On the twelfth day of industrial training, I advanced into implementing supervised machine learning pipelines using the <span class="code-block">scikit-learn</span> library. I focused on building an end-to-end predictive framework starting from raw data ingestion and manual dataset shuffling to train-test partition splits. Using the Pima Indians Diabetes Dataset, I evaluated and compared multiple prominent classification algorithms. This exercise provided practical experience in model initialization, fitting training data, predicting unseen validation sets, and quantitatively measuring performance using accuracy metrics.
+        </p>
+    </section>
+
+    <!-- Learning Objectives -->
+    <section class="card">
+        <h2> Learning Objectives</h2>
+        <ul>
+            <li>Implement manual data shuffling techniques using index permutations</li>
+            <li>Construct customized train-test data partition ratios without relying on library helper hooks</li>
+            <li>Understand the initialization parameters of multiple classification algorithms</li>
+            <li>Train multiple estimators including Linear models, Naive Bayes, Instance-based, Tree-based, and Ensemble classifiers</li>
+            <li>Evaluate model output metrics using comparative accuracy benchmarking indicators</li>
+        </ul>
+    </section>
+
+    <!-- Activity 1 -->
+    <section class="card">
+        <h2> Activity 1: Data Preparation, Custom Shuffling, and Splitting Pipeline</h2>
+        <p>
+            Load the classification dataset from an external repository, separate target features from class outputs, randomly shuffle observations, and perform an 80-20 train-test boundary partition split.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Isolate the dependent target variable label using dataframe drop operations</li>
+            <li>Generate random index orders via <span class="code-block">np.random.permutation()</span> to ensure clean data mixing</li>
+            <li>Reorder target values using coordinate integer lookups (<span class="code-block">.iloc</span>)</li>
+            <li>Calculate splitting boundaries mathematically to separate training and evaluation blocks</li>
+        </ul>
+
+        <h3> Code Split</h3>
+<pre>
+import pandas as pd
+import numpy as np
+
+# Load the target diabetes dataset
+data = pd.read_csv("https://raw.githubusercontent.com/npradaschnor/Pima-Indians-Diabetes-Dataset/refs/heads/master/diabetes.csv")
+
+# Separate features (x) and target labels (y)
+x = data.drop("Outcome", axis=1)
+y = data["Outcome"]
+
+# Generate random index permutations for shuffling
+indices = np.random.permutation(len(data))
+x = x.iloc[indices]
+y = y.iloc[indices]
+
+# Calculate an 80% split index threshold
+split_index = int(len(data) * 0.80)
+
+# Slice the partitioned arrays into train and test spaces
+x_train = x.iloc[:split_index]
+y_train = y.iloc[:split_index]
+x_test = x.iloc[split_index:]
+y_test = y.iloc[split_index:]
+
+print(f"Data split successfully. Training rows: {len(x_train)}, Testing rows: {len(x_test)}")
+</pre>
+    </section>
+
+    <!-- Activity 2 -->
+    <section class="card">
+        <h2> Activity 2: Multi-Model Training and Accuracy Benchmarking</h2>
+        <p>
+            Train eight distinct classification algorithms on the prepared dataset, execute predictive passes on testing rows, and compute comparative accuracy scores.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Implement traditional baseline linear systems like Logistic Regression and Stochastic Gradient Descent (SGD)</li>
+            <li>Train distance-based and probability-based algorithms including K-Nearest Neighbors (KNN) and Gaussian Naive Bayes</li>
+            <li>Deploy single and ensemble tree systems including Decision Trees and Random Forests</li>
+            <li>Train Support Vector Classifier models using structured iteration constraints</li>
+            <li>Benchmark all classifier performance outputs using the <span class="code-block">accuracy_score</span> metric</li>
+        </ul>
+
+        <h3> Code Split</h3>
+<pre>
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn import svm
+
+# 1. Logistic Regression Classification
+lr = LogisticRegression(max_iter=1000)
+lr.fit(x_train, y_train)
+predict = lr.predict(x_test)
+print("logistic regression : ", accuracy_score(y_test, predict))
+
+# 2. Support Vector Classification (SVC)
+clf = SVC(max_iter=1000)
+clf.fit(x_train, y_train)
+prediction = clf.predict(x_test)
+print("svc                 : ", accuracy_score(y_test, prediction))
+
+# 3. Stochastic Gradient Descent Classifier (SGDC)
+gc = SGDClassifier(max_iter=1000)
+gc.fit(x_train, y_train)
+prediction = gc.predict(x_test)
+print("SGDC                : ", accuracy_score(y_test, prediction))
+
+# 4. Naive Bayes Classifier
+nb = GaussianNB()
+nb.fit(x_train, y_train)
+prediction = nb.predict(x_test)
+print("naive bayes         : ", accuracy_score(y_test, prediction))
+
+# 5. K-Nearest Neighbors Classifier (KNN)
+knn = KNeighborsClassifier()
+knn.fit(x_train, y_train)
+prediction = knn.predict(x_test)
+print("knn                 : ", accuracy_score(y_test, prediction))
+
+# 6. Decision Tree Classifier
+dt = DecisionTreeClassifier()
+dt.fit(x_train, y_train)
+prediction = dt.predict(x_test)
+print("decision tree       : ", accuracy_score(y_test, prediction))
+
+# 7. Random Forest Classifier
+rf = RandomForestClassifier()
+rf.fit(x_train, y_train)
+prediction = rf.predict(x_test)
+print("random forest       : ", accuracy_score(y_test, prediction))
+
+# 8. Standard Support Vector Machine (SVM)
+svm_model = svm.SVC()
+svm_model.fit(x_train, y_train)
+prediction = svm_model.predict(x_test)
+print("svm                 : ", accuracy_score(y_test, prediction))
+</pre>
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="card">
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>How to isolate feature columns and labels manually for machine learning analysis</li>
+            <li>Shuffling raw data matrices using row index permutations to avoid order bias</li>
+            <li>Constructing explicit training and testing split slices using mathematical boundary indices</li>
+            <li>Applying the uniform <span class="code-block">.fit()</span> and <span class="code-block">.predict()</span> workflow API across different Scikit-Learn models</li>
+            <li>Using optimization limitations like <span class="code-block">max_iter=1000</span> to ensure gradient convergence</li>
+            <li>Benchmarking multiple algorithms on a single tracking dataset using unified accuracy indicators</li>
+        </ul>
+    </section>
+
+</div>

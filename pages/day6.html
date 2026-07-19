@@ -1,0 +1,279 @@
+<header>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
+
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
+    <h1> Day 6 - File System Automation & Dataset Structural Organization</h1>
+    <p>Industrial Training Diary</p>
+</header>
+
+<div class="container">
+
+    <!-- Introduction -->
+    <section class="card">
+        <h2> Introduction</h2>
+        <p>
+            On the sixth day of industrial training, I focused heavily on file system automation, structural directory parsing, and dynamic dataset organization using Python's built-in <span class="code-block">os</span> and <span class="code-block">shutil</span> modules. In machine learning and computer vision pipelines, raw data is often unstructured or unorganized. I engineered automation scripts to programmatically traverse directory hierarchies, compute dataset distributions, isolate files based on extension types, apply conditional alphanumeric rules to parse individual filenames, and restructure nested image categories with precise indexing constraints. These practical exercises provided deep foundational knowledge on file handling pipelines, clean structural data transformations, and system-level operations.
+        </p>
+    </section>
+
+    <!-- Learning Objectives -->
+    <section class="card">
+        <h2> Learning Objectives</h2>
+        <ul>
+            <li>Master file system interaction using the Python <span class="code-block">os</span> module</li>
+            <li>Implement high-level shell file utilities via the <span class="code-block">shutil</span> library</li>
+            <li>Perform robust relational directory path building safe across diverse runtime environments</li>
+            <li>Apply conditional token extraction logic on filenames for metadata classifications</li>
+            <li>Construct clean programmatic pipeline workflows to automate sorting and classification transformations</li>
+            <li>Count data distributions efficiently across deep nested subdirectory architectures</li>
+        </ul>
+    </section>
+
+    <!-- Activity 1 -->
+    <section class="card">
+        <h2> Activity 1: Dynamic Directory Creation & Image Replication Pipeline</h2>
+        <p>
+            Scan a targeted local filesystem source folder, parse out all constituent items, programmatically initialize a new target folder within the active environment context, and mirror all assets over.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Read directory assets using <span class="code-block">os.listdir()</span> pathways</li>
+            <li>Resolve execution context locations via <span class="code-block">os.getcwd()</span> hooks</li>
+            <li>Generate directory endpoints securely using <span class="code-block">os.mkdir()</span></li>
+            <li>Replicate image files utilizing <span class="code-block">shutil.copy()</span> binary operations</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import os
+
+
+data= os.listdir(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\small images")
+
+# print(data)
+
+p = os.path.join(os.getcwd(),"newf") # os.getcwd gets current working directory
+print(p)
+
+os.mkdir(p)
+import shutil
+for img in data:
+    src= os.path.join(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\small images",img)
+    # print(src)
+    dst = os.path.join(p,img)
+    # print(dst)
+    shutil.copy(src,dst)
+</pre>
+    </section>
+
+    <!-- Activity 2 -->
+    <section class="card">
+        <h2> Activity 2: Image Distribution Census across Subdirectories</h2>
+        <p>
+            Traverse dynamic structured dataset directories (such as distinct Cat and Dog subfolders), crawl deep into each categorical storage path, and calculate total distribution values.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Scan major high-level dataset nodes containing nested directories</li>
+            <li>Generate absolute child path targets safely with relational concatenation rules</li>
+            <li>Evaluate image element lengths inside separate sub-folders dynamically</li>
+            <li>Display data distribution insights inside terminal logs</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import os
+import shutil
+
+# "C:\Users\HP\Downloads\sample"
+data = os.listdir(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\sample")
+# print(data)
+
+cat = os.path.join(os.getcwd(),"cats")
+dog = os.path.join(os.getcwd(),"dogs")
+os.mkdir(cat)
+os.mkdir(dog)
+
+for img in data :
+    if "cat" in img :
+        src = os.path.join(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\sample",img)
+        dst = os.path.join(cat,img)
+        shutil.move(src,dst)
+    elif "dog" in img :
+        src = os.path.join(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\sample", img)
+        dst = os.path.join(dog, img)
+        shutil.move(src, dst)
+</pre>
+    </section>
+
+    <!-- Activity 3 -->
+    <section class="card">
+        <h2> Activity 3: File Format Extensions Sorting Pipeline</h2>
+        <p>
+            Scan an unorganized multi-format dataset repository and dispatch separate tracking items into unique targets where all <span class="code-block">.jpg</span> files are grouped into a JPG folder, <span class="code-block">.xml</span> files into an XML folder, and <span class="code-block">.pdf</span> documents into a PDF folder.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Extract dynamic extension tags using filename string splits or <span class="code-block">os.path.splitext()</span></li>
+            <li>Create corresponding targeted format group folders dynamically if not present</li>
+            <li>Shift records safely from raw roots into target format structural paths</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import os
+
+data = os.listdir(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\Test")
+# print(data)
+for dr in data :
+    path = os.path.join(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\Test",dr)
+    images = os.listdir(path)
+    print("number of images in " , dr , " are  :  ", len(images))
+</pre>
+    </section>
+
+    <!-- Activity 4 -->
+    <section class="card">
+        <h2> Activity 4: Filename Numerical Parity Conditional Classifier</h2>
+        <p>
+            Analyze structured filenames containing compound identifier tokens (e.g., <span class="code-block">n02085620_1073.jpg</span>), isolate trailing unique identification indexes after the underscore parameter, determine numerical odd/even parity status, and move them into target classification environments.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Isolate alphanumeric file stems cleanly away from formatting extensions</li>
+            <li>Tokenize string segments using character split delimiters (<span class="code-block">_</span>)</li>
+            <li>Cast extracted sub-string indexes safely into operational Integer formats</li>
+            <li>Apply modulo math logic (<span class="code-block">% 2</span>) to route assets to Even or Odd tracking spaces</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+data = os.listdir(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\data")
+print(data)
+odd = os.path.join(os.getcwd(),"odd")
+even = os.path.join(os.getcwd(), "even")
+
+os.mkdir(odd)
+os.mkdir(even)
+
+for i in range(1,len(data)):
+    file = data[i]
+    num = file.split("_")[1].split(".")[0]
+    if int(num)%2 == 0 :
+        src = os.path.join(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\data",file)
+        dst = os.path.join(even,file)
+        shutil.move(src,dst)
+    else :
+        src = os.path.join(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\data", file)
+        dst = os.path.join(odd, file)
+        shutil.move(src, dst)
+</pre>
+    </section>
+
+    <!-- Activity 5 -->
+    <section class="card">
+        <h2> Activity 5: Normalized Relational Renaming & Incremental Dataset Indexing</h2>
+        <p>
+            Reconstruct unstructured image collections into unified nested directories (e.g., "Apple Braeburn", "Banana") where image filenames are forced to dynamically inherit parent category folder names along with an auto-incrementing integer index suffix (e.g., <span class="code-block">Apple Braeburn_1.jpg</span>, <span class="code-block">Apple Braeburn_2.jpg</span>).
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Traverse multi-level child trees to find localized image pools</li>
+            <li>Retain category names from folder strings to standardize formatting rules</li>
+            <li>Track file loops with integer counters to generate clean index sequences</li>
+            <li>Execute systematic rename and relocation operations across the dataset storage roots</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+data = os.listdir(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\Test")
+for folder in data :
+    path = os.path.join(os.getcwd(),folder)
+    os.mkdir(path)
+    name = os.path.join(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\Test", folder)
+    files = os.listdir(name)
+    for i in range(len(files)):
+        new_name = folder + "_" + str(i) + ".jpg"
+        src = os.path.join(r"E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 6\Test",folder,files[i])
+        dst = os.path.join(os.getcwd(), folder ,new_name )
+        shutil.move(src,dst)
+</pre>
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="card">
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>Automated manipulation of directories using the Python <span class="code-block">os</span> module</li>
+            <li>High-level batch storage manipulation using <span class="code-block">shutil</span> copy/move rules</li>
+            <li>Dynamic metadata resolution using string tokenization techniques on asset filenames</li>
+            <li>Data pipeline preparation routines used to parse unstructured graphics into clean machine learning classes</li>
+            <li>Defensive programming practices against broken files, formatting anomalies, and missing folder nodes</li>
+        </ul>
+    </section>
+
+</div>

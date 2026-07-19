@@ -1,0 +1,427 @@
+<header>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
+
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
+    <h1> Day 5 - Custom Data Manipulation & Relational Aggregation</h1>
+    <p>Industrial Training Diary</p>
+</header>
+
+<div class="container">
+
+    <!-- Introduction -->
+    <section class="card">
+        <h2> Introduction</h2>
+        <p>
+            On the fifth day of industrial training, I progressed into advanced custom data manipulation and relational data aggregation using Python. Working with the REST Countries dataset, I transitioned from handling basic data mappings to solving analytical structural problems. I wrote scripts to build inverted indexes grouping nations by currency usage, filter and aggregate data metrics specifically targeting island nations, track extreme variations in text boundaries (longest and shortest names), and compute complex demographic trends like regional population averages. Additionally, I learned how to compute proportional global data shares and format statistical insights into clean textual tables. These practices refined my understanding of multi-tiered payload filtering, data aggregation, and structured reporting pipelines.
+        </p>
+    </section>
+
+    <!-- Learning Objectives -->
+    <section class="card">
+        <h2> Learning Objectives</h2>
+        <ul>
+            <li>Group relational datasets dynamically using dictionary-based indexing</li>
+            <li>Apply isolated filtering to evaluate distinct geographical subsets (Island Nations)</li>
+            <li>Perform tracking operations to identify extreme boundary records (min/max string evaluation)</li>
+            <li>Aggregate demographic data using conditional averaging algorithms across subregions</li>
+            <li>Calculate global proportional metrics and represent insights using styled tables</li>
+            <li>Handle null structures and complex nested parameters without script execution failures</li>
+        </ul>
+    </section>
+
+    <!-- Assignment 4: Question 8 -->
+    <section class="card">
+        <h2> Question 1: Currency-Based Country Grouping</h2>
+        <p>
+            Write a script that fetches currency information for all countries and groups countries according to the currency they use.
+        </p>
+
+        <h3>Task Performed</h3>
+        <ul>
+            <li>Parse currency nodes nested deep within each country JSON payload</li>
+            <li>Dynamically initialize a dictionary map pairing currency names to lists of utilizing nations</li>
+            <li>Format and print the consolidated monetary-to-geographic lookup tree</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers = {
+        "Authorization" : "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+
+def get_currency(info,c):
+    cr = info["currencies"]
+    # print(cr)
+    for i in cr :
+        # print(i["name"])
+        if i["name"] == c :
+            return True
+        else :
+            return False
+        # for j in i :
+        #     if j["name"] == c :
+        #         return True
+        #     else :
+        #         return False
+
+
+# print(data)
+currency = []
+
+for info in data["data"]["objects"]:
+    cr = info["currencies"]
+    if cr not in currency:
+        currency.append(cr)
+# print(currency)
+
+c_names = []
+for i in currency :
+    for j in i :
+        if j["name"] not in c_names:
+            c_names.append(j["name"])
+# print(c_names)
+# print(len(c_names))
+
+result = []
+for c in c_names:
+    row = []
+    countries = []
+    row.append(c)
+    for info in data["data"]["objects"]:
+
+        if get_currency(info, c) :
+            countries.append(info["names"]["common"])
+            # print(info["names"]["common"])
+
+    row.append(countries)
+    result.append(row)
+print(result)
+
+</pre>
+    </section>
+
+    <!-- Assignment 5: Question 9 -->
+    <section class="card">
+        <h2> Question 2: Island Nations Population Aggregation</h2>
+        <p>
+            Fetch data for all countries and calculate the total combined population of all island nations (countries having no land borders).
+        </p>
+
+        <h3>Task Performed</h3>
+        <ul>
+            <li>Isolate island nations by validating the absolute absence of land border keys or tracking empty lists</li>
+            <li>Accumulate populations dynamically from the filtered sub-array of records</li>
+            <li>Log and print the definitive sum total of global island demographic counts</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers = {
+        "Authorization" : "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+
+# print(data)
+
+total_population = 0
+
+for info in data["data"]["objects"]:
+    border = info["borders"]
+    if len(border) == 0 :
+        pop = info["population"]
+        total_population+=pop
+print(total_population)
+</pre>
+    </section>
+
+    <!-- Assignment 5: Question 10 -->
+    <section class="card">
+        <h2> Question 3: Name Boundary Extreme Evaluation</h2>
+        <p>
+            Write a script that finds the countries with the longest and shortest names based on character count metrics.
+        </p>
+
+        <h3>Task Performed</h3>
+        <ul>
+            <li>Evaluate character string lengths for all common country name records</li>
+            <li>Track structural minimum and maximum limits through dynamic data iteration</li>
+            <li>Display the final boundary country elements with their calculated lengths</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers = {
+        "Authorization" : "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+
+first_name = data["data"]["objects"][0]["names"]["common"]
+
+max_c = ""
+max_count = 0
+min_c = first_name
+min_count = 0
+
+for info in data["data"]["objects"]:
+    name = info["names"]["common"]
+    l = len(name)
+    if l > len(max_c):
+        max_c = name
+        max_count = l
+    if l < len(min_c) :
+        min_c = name
+        min_count = l
+print("country with longest name is : ( " , max_c , " , ", max_count, " )")
+print("country with shortest name is : ( " , min_c , " , ", min_count, " )")
+</pre>
+    </section>
+
+    <!-- Assignment 6: Question 11 -->
+    <section class="card">
+        <h2> Question 4: Subregion Demographics Aggregation</h2>
+        <p>
+            Create a program that groups countries by their Subregion and calculates the average population of all countries belonging to each distinct subregion.
+        </p>
+
+        <h3>Task Performed</h3>
+        <ul>
+            <li>Extract subregion categories and map matching country sets into arrays</li>
+            <li>Aggregate separate sums and item counters for every dynamic regional classification</li>
+            <li>Apply mathematical division logic to calculate and display the statistical average populations</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers = {
+        "Authorization" : "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+
+def sub(s,info):
+    region = info["subregion"]
+    if s == region :
+        return True
+    else :
+        return False
+
+# print(data)
+sub_regions = []
+for info in data["data"]["objects"]:
+    sr = info["subregion"]
+    if sr not in sub_regions:
+        sub_regions.append(sr)
+# print(sub_regions)
+
+sr_countries = []
+for s in sub_regions:
+    row = []
+    row.append(s)
+    countries = []
+    for info in data["data"]["objects"]:
+        if sub(s,info) :
+            countries.append(info["names"]["common"])
+
+    row.append(countries)
+    sr_countries.append(row)
+# print(sr_countries)
+
+result = []
+for dt in sr_countries :
+    row = []
+    row.append(dt[0])
+    sum = 0
+    n = len(dt[1])
+    for i in dt[1]:
+        for info in data["data"]["objects"]:
+            name = info["names"]["common"]
+            if name == i :
+                sum+= info["population"]
+    avg = sum/n
+    row.append(avg)
+    result.append(row)
+print(result)
+</pre>
+    </section>
+
+    <!-- Assignment 6: Question 12 -->
+    <section class="card">
+        <h2> Question 5: Global Land Area Percentage Distribution</h2>
+        <p>
+            Write a script that retrieves all country data, calculates the percentage of the world's land area occupied by each country, and outputs the top 5 countries in a formatted table.
+            <br><strong>Formula:</strong> Country Area Percentage = (Country Area / Total World Area) &times; 100
+        </p>
+
+        <h3>Task Performed</h3>
+        <ul>
+            <li>Iterate through the global dataset array to calculate the global aggregate land mass area sum</li>
+            <li>Evaluate proportional area percentage slices for each nation element</li>
+            <li>Sort the data objects downward and build a clean structural results table summarizing the Top 5 nations</li>
+        </ul>
+
+        <table border="1" cellpadding="10" style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+            <tr style="background-color: #ff4d88; color: white;">
+                <th>Rank</th>
+                <th>Target Evaluation Field</th>
+                <th>Mathematical Output Presentation</th>
+            </tr>
+            <tr><td>1</td><td>Top 5 Country Names</td><td>Sorted String Names</td></tr>
+            <tr><td>2</td><td>Area Slices</td><td>Individual Land Mass Square Kilometers</td></tr>
+            <tr><td>3</td><td>Occupied Ratios</td><td>Calculated Percentage Share (%)</td></tr>
+        </table>
+
+        <br>
+        <h3> Code</h3>
+<pre>
+import requests
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers = {
+        "Authorization" : "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+
+import requests
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers={
+        "Authorization": "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+
+countries = data["data"]["objects"]
+
+# Calculate total world area
+total_area = 0
+
+for info in countries:
+    area = info.get("area", {}).get("kilometers", 0)
+    total_area += area
+
+
+# Calculate area percentage for each country
+result = []
+
+for info in countries:
+    name = info["names"]["common"]
+    area = info.get("area", {}).get("kilometers", 0)
+
+    if area != 0:
+        percentage = (area / total_area) * 100
+        result.append([name, percentage])
+
+
+# Sort countries by area percentage (descending)
+result.sort(key=lambda x: x[1], reverse=True)
+
+
+# Display top 5 countries
+print(f"{'Country':30} {'Area Percentage':>15}")
+print("-" * 50)
+
+for country in result[:5]:
+    print(f"{country[0]:30} {country[1]:>12.2f}%")</pre>
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="card">
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>Advanced Dictionary mappings for database-like inverted tracking lookups</li>
+            <li>Complex array aggregation techniques and relational subset extraction strategies</li>
+            <li>Data visualization and display management using custom ASCII aligned padding structures</li>
+            <li>Mathematical error boundary testing routines over structural geographic fields</li>
+            <li>Dynamic object sorting configurations utilizing lambda key parameters in Python scripts</li>
+        </ul>
+    </section>
+
+</div>

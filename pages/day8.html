@@ -1,0 +1,354 @@
+<header>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
+
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
+    <h1> Day 8 - Advanced Multi-Page Scraping & Dynamic E-Commerce Automation</h1>
+    <p>Industrial Training Diary</p>
+</header>
+
+<div class="container">
+
+    <!-- Introduction -->
+    <section class="card">
+        <h2> Introduction</h2>
+        <p>
+            On the eighth day of industrial training, I focused on advanced web scraping techniques to handle complex e-commerce websites. I expanded my skills from parsing simple, static text to handling multi-page link collections, dynamic pricing blocks with error handling, and web pages that rely on JavaScript rendering. For static websites, I used <span class="code-block">requests</span> and <span class="code-block">BeautifulSoup</span> to dig into nested product pages. For highly dynamic platforms like Flipkart and Amazon that load content via JavaScript, I integrated browser automation using <span class="code-block">Selenium WebDriver</span>. This enabled me to automatically launch a browser, wait for scripts to execute, and safely download highly unstructured retail datasets into lists of profiles.
+        </p>
+    </section>
+
+    <!-- Learning Objectives -->
+    <section class="card">
+        <h2> Learning Objectives</h2>
+        <ul>
+            <li>Implement two-tier web crawling (scraping details by extracting inner links first)</li>
+            <li>Apply inline exception handling using try/except blocks for conditional pricing schemas</li>
+            <li>Traverse pagination elements to identify multi-page indexing nodes</li>
+            <li>Integrate browser automation pipelines using Selenium WebDriver</li>
+            <li>Manage page loading constraints using structured delays (<span class="code-block">time.sleep</span>)</li>
+            <li>Extract multi-layered product specifications (SKUs, Categories, Ratings, Delivery Dates)</li>
+        </ul>
+    </section>
+
+    <!-- Activity 1 -->
+    <section class="card">
+        <h2> Activity 1: Two-Tier Product Detail Extraction (Puma India Store)</h2>
+        <p>
+            Scrape the Puma India Manchester City FC collection page to gather product listing links, access each separate link, and parse out three targeted fields: Product Name, Price, and Product Description.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Extract target product link extensions and build full absolute URLs</li>
+            <li>Navigate into child pages sequentially using dynamic network queries</li>
+            <li>Use inline exception fallbacks to safely look up standard or promotional price text structures</li>
+            <li>Collect details and store them cleanly inside a master tracking matrix</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://in.puma.com/in/en/collections/collections-football/collections-football-manchester-city-fc"
+data = requests.get(url).content
+
+soup = BeautifulSoup(data, "html.parser")
+
+# Target product anchor elements
+item = soup.find_all("a", class_="tw-4m0ihd tw-hlsw0v cursor-pointer absolute inset-0 z-[1] focus:outline-none focus:ring-2 focus:ring-puma-black")
+links = []
+for h in item:
+    l = h.get("href")
+    links.append("https://in.puma.com" + l)
+
+result = []
+for link in links:
+    row = []
+    dt = requests.get(link).content
+    sp = BeautifulSoup(dt, "html.parser")
+
+    # Extract product name
+    name = sp.find("h1").text
+    row.append(name)
+
+    # Try/except block for handling discounted vs regular price layouts
+    try:
+        price = sp.find("span", class_="whitespace-nowrap text-base text-red font-bold override:text-xl override:md:text-2xl").text
+        row.append(price)
+    except:
+        price = sp.find("span", class_="whitespace-nowrap text-base font-bold override:md:text-2xl").text
+        row.append(price)
+
+    # Extract descriptive body text
+    prod_des = sp.find("div", class_="tw-1rgvuf0 tw-1igwn51 tw-dynr3h tw-l8cie8 pb-4")
+    row.append(prod_des.text)
+    result.append(row)
+
+print(result)
+</pre>
+    </section>
+
+    <!-- Activity 2 -->
+    <section class="card">
+        <h2> Activity 2: Paginated Loop Scraping (E-Commerce Sandbox)</h2>
+        <p>
+            Crawl through an e-commerce platform by locating footer pagination buttons, accessing the separated page views, and pulling detailed lists of product fields (Title, Price, Image URL, Description, SKU, and Category).
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Parse numbers index navigation links using specific pagination classes</li>
+            <li>Extract target deep catalog blocks loop rows safely</li>
+            <li>Collect 6 separate product fields including image sources and text descriptions</li>
+            <li>Use early termination breaks to test validation logic smoothly</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://www.scrapingcourse.com/ecommerce/"
+data = requests.get(url).content
+soup = BeautifulSoup(data, "html.parser")
+result = []
+
+# Gather pagination links
+page_links = []
+for i in soup.find_all("a", class_="page-numbers"):
+    page_links.append(i.get("href"))
+
+for link in page_links:
+    response = requests.get(link).content
+    sp = BeautifulSoup(response, "html.parser")
+    products = sp.find_all("a", class_="woocommerce-LoopProduct-link woocommerce-loop-product__link")
+
+    for i in products:
+        row = []
+        product_link = i.get("href")
+        product = requests.get(product_link).content
+        sp2 = BeautifulSoup(product, "html.parser")
+
+        # Collect 6 main parameters
+        title = sp2.find("h1", class_="product_title entry-title")
+        row.append(title.text)
+
+        price = sp2.find("bdi")
+        row.append(price.text)
+
+        img = sp2.find("img")
+        row.append(img.get("src"))
+
+        des = sp2.find("div", class_="woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab")
+        row.append(des.text)
+
+        sku = sp2.find("span", class_="sku_wrapper")
+        row.append(sku.text)
+
+        cat = sp2.find("span", class_="posted_in")
+        row.append(cat.text)
+
+        result.append(row)
+    break # Test safety checkpoint limit
+
+print(result)
+</pre>
+    </section>
+
+    <!-- Activity 3 -->
+    <section class="card">
+        <h2> Activity 3: JavaScript-Rendered Data Automation (Flipkart Mi Store)</h2>
+        <p>
+            Automate an instance of Chrome using Selenium WebDriver to load JavaScript elements from the Flipkart mobile brand listings, extract absolute product URLs, and pull records matching product titles, ratings, and prices.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Initialize automated Chrome environment paths via WebDriver management managers</li>
+            <li>Implement execution delays using <span class="code-block">time.sleep()</span> to ensure content fully renders</li>
+            <li>Collect elements utilizing specialized alphanumeric layout attributes</li>
+            <li>Implement conditional inline logic steps to gracefully swap missing evaluations with <span class="code-block">None</span> structures</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from bs4 import BeautifulSoup
+
+# Setup Selenium automated Chrome interface
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+
+url = "https://www.flipkart.com/mobiles/mi~brand/pr?sid=tyy%2C4io&otracker=nmenu_sub_Electronics_0_Mi&otracker=nmenu_sub_Electronics_0_Mi&page=1"
+driver.get(url)
+time.sleep(5) # Wait for elements to register
+
+soup = BeautifulSoup(driver.page_source, "html.parser")
+pro = soup.find_all("a", {"class": "k7wcnx"})
+products = []
+
+for p in pro:
+    products.append("https://www.flipkart.com" + p.get("href"))
+
+products_data = []
+for link in products:
+    driver.get(link)
+    time.sleep(5)
+
+    sp2 = BeautifulSoup(driver.page_source, "html.parser")
+    title = sp2.find("h1", class_="v1zwn21l v1zwn26 _1psv1zeb9 _1psv1ze0")
+    price = sp2.find("div", class_="v1zwn21l v1zwn20 _1psv1zeb9 _1psv1ze0")
+    rating = sp2.find("div", class_="css-146c3p1")
+
+    products_data.append([
+        title.text if title else None,
+        rating.text if rating else None,
+        price.text if price else None
+    ])
+    print(products_data)
+
+driver.quit()
+</pre>
+    </section>
+
+    <!-- Activity 4 -->
+    <section class="card">
+        <h2> Activity 4: Complex Deep Feature Harvesting (Amazon India iPhone Queries)</h2>
+        <p>
+            Automate search results parsing via dynamic browser automation to crawl deep into individual product configurations, extracting detailed parameters: Name, Rating, Total Review Counts, Pricing, Delivery Dates, and Detailed Descriptions.
+        </p>
+
+        <h3>Tasks Performed</h3>
+        <ul>
+            <li>Extract nested anchors using descriptive product identifier link layout structures</li>
+            <li>Perform sub-page navigations within the active automated browser thread context</li>
+            <li>Clean up gathered string text by stripping out unwanted details like "Details" link tags</li>
+            <li>Compile structural product arrays inside console outputs safely</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+from bs4 import BeautifulSoup
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+url = "https://www.amazon.in/s?k=iphone&crid=3C6WQC5WJM8YA&sprefix=iphone+13%2Caps%2C350&ref=nb_sb_noss_2"
+
+driver.get(url)
+time.sleep(5)
+
+soup = BeautifulSoup(driver.page_source, "html.parser")
+p = soup.find_all("a", {"class": "a-link-normal s-no-hover s-underline-text s-underline-link-text s-link-style a-text-normal"})
+
+products_link = []
+for i in p:
+    products_link.append("https://www.amazon.in/" + i.get("href"))
+
+for link in products_link:
+    print(link)
+    driver.get(link)
+    time.sleep(5)
+
+    sp = BeautifulSoup(driver.page_source, "html.parser")
+    title = sp.find("span", {"class": "a-size-large product-title-word-break"})
+    price = sp.find("span", {"class": "a-price-whole"})
+    about = sp.find("div", {"class": "a-section a-spacing-medium a-spacing-top-small"})
+    ratings = sp.find("span", {"class": "a-size-small a-color-base"})
+    rating_count = sp.find("span", {"class": "a-size-small", "id": "acrCustomerReviewText"})
+
+    # Extract delivery message text strings
+    gib_element = sp.find("span", {"data-csa-c-delivery-type": "delivery"})
+    gib = gib_element.text.replace("Details", "") if gib_element else None
+
+    print([
+        title.text if title else None,
+        price.text if price else None,
+        about.text if about else None,
+        ratings.text if ratings else None,
+        rating_count.text if rating_count else None,
+        gib if gib else None
+    ])
+
+driver.quit()
+</pre>
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="card">
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>How to extract inner links first to crawl deeper page details</li>
+            <li>Using try/except statements to handle unpredictable web page structures</li>
+            <li>Automating browser interactions using Selenium WebDriver for JavaScript-loaded content</li>
+            <li>Managing loading times using intentional wait delays</li>
+            <li>Cleaning text streams dynamically by filtering out messy characters and placeholders</li>
+        </ul>
+    </section>
+
+</div>

@@ -1,0 +1,266 @@
+<header>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
+
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
+    <h1> Day 4 - Advanced Data Extraction & Analytical Mapping</h1>
+    <p>Industrial Training Diary</p>
+</header>
+
+<div class="container">
+
+    <!-- Introduction -->
+    <section class="card">
+        <h2> Introduction</h2>
+        <p>
+            On the fourth day of industrial training, I advanced my skills in working with REST APIs by building complex data extraction and lookup logic. Using the REST Countries dataset, I transitioned from simple data filtering to advanced analytical problems. I wrote scripts to perform algorithmic calculations like finding maximum population densities, built inverted indices to map nested relational attributes (languages to countries), and created a robust neighbor lookup system using structural alpha border codes. These exercises drastically enhanced my proficiency in data architecture, mathematical exception handling in JSON parsing, and handling nested objects/arrays in Python.
+        </p>
+    </section>
+
+    <!-- Learning Objectives -->
+    <section class="card">
+        <h2> Learning Objectives</h2>
+        <ul>
+            <li>Perform mathematical evaluations on JSON payloads</li>
+            <li>Implement algorithmic max-value tracking on dynamic data</li>
+            <li>Understand and implement Inverted Indexing concepts</li>
+            <li>Traverse multi-layered nested dictionary objects</li>
+            <li>Build relational lookups using code-to-profile mapping</li>
+            <li>Handle missing keys and structural exceptions gracefully</li>
+        </ul>
+    </section>
+
+    <!-- Assignment 3: Question 5 -->
+    <section class="card">
+        <h2> Question 1: Population Density Analysis</h2>
+        <p>
+            Write a script that retrieves data from the API and finds the country with the highest Population Density. 
+            <br><strong>Formula:</strong> Population Density = Population &divide; Area
+        </p>
+
+        <h3>Task Performed</h3>
+        <ul>
+            <li>Fetch complete country payload via API token</li>
+            <li>Safeguard script against data anomalies (missing keys or zero-area fields)</li>
+            <li>Calculate density dynamically per object</li>
+            <li>Track and isolate the absolute maximum population density country</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+
+import requests
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers = {
+        "Authorization" : "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+
+# c_d = {}
+max_density = 0
+name = ""
+for info in data["data"]["objects"]:
+    popu = info.get("population")
+    area = info.get("area").get("kilometers")
+    density = popu/area
+    if density > max_density:
+        max_density = density
+        name = info.get("names", {}).get("common", "N/A")
+print(name,max_density)
+
+</pre>
+    </section>
+
+    <!-- Assignment 3: Question 6 -->
+    <section class="card">
+        <h2> Question 2: Global Language Inverted Index Map</h2>
+        <p>
+            Fetch the list of all countries and extract details about their official languages. Reorganize this relational data to create a structural inverted index dictionary where the Language Name is the Key and a list of countries speaking it serves as the Value.
+        </p>
+
+        <h3>Task Performed</h3>
+        <ul>
+            <li>Access nested language sub-objects inside each country data node</li>
+            <li>Implement dynamic dictionary initialization logic</li>
+            <li>Map language names to lists of multiple country names</li>
+            <li>Output a complete structural map of global spoken languages</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers = {
+        "Authorization" : "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+
+print(data)
+
+languages = []
+for info in data["data"]["objects"]:
+    for i in info["languages"] :
+        languages.append(i["name"])
+
+
+print(languages)
+cd = {}
+for lan in languages :
+    c = []
+    for info in data["data"]["objects"]:
+        lang = info["languages"]
+        for i in range(len(lang)):
+            if lan == info["languages"][i]["name"]:
+                c.append(info["names"]["common"])
+    cd[lan]=c
+
+print(cd)
+
+
+</pre>
+    </section>
+
+    <!-- Assignment 3: Question 7 -->
+    <section class="card">
+        <h2> Question 3: Border & Neighbor Relational Mapping</h2>
+        <p>
+            Create a program that takes a list of country names as input and returns the descriptive profiles (Name, Capital, Population, and Area) of all neighboring countries sharing land borders with the given targets. Test the system using Germany and France.
+        </p>
+
+        <h3>Task Performed</h3>
+        <ul>
+            <li>Extract Alpha code listings from border arrays</li>
+            <li>Develop a lookup indexing structure mapping code strings to base profiles</li>
+            <li>Resolve inputs (Germany and France) to their respective boundary vectors</li>
+            <li>Fetch and print nested target details for all identified border neighbors</li>
+        </ul>
+
+        <h3> Code</h3>
+<pre>
+import requests
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers = {
+        "Authorization" : "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+print(data)
+
+# c_list = [input("Enter list of countries")]
+# print(c_list)
+c_list = ["Germany", "France"]
+border_c = []
+for country in c_list :
+    for info in data["data"]["objects"]:
+        name = info["names"]["common"]
+
+        # print(info["borders"])
+        if country == name :
+            border_c.append(info["borders"])
+# print(border_c)
+
+ls = []
+for i in range(len(border_c)):
+    for j in range(len(border_c[i])):
+        if border_c[i][j] not in ls :
+            ls.append(border_c[i][j])
+print(ls)
+
+result = []
+
+for cod in ls :
+    for info in data["data"]["objects"]:
+        code = info["codes"]["alpha_3"]
+        if cod == code :
+            row = []
+            row.append(info.get("names").get("common"))
+            row.append(info.get("population"))
+            row.append(info.get("area").get("kilometers"))
+            result.append(row)
+print(result)
+</pre>
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="card">
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>Algorithmic Data Manipulation over REST Payloads</li>
+            <li>Inverted Index Architecture using Dynamic Dictionaries</li>
+            <li>Relational Key Mapping using Code Registries</li>
+            <li>Multi-layered Object Data Transformation workflows</li>
+            <li>Handling missing schema attributes safely without crash limits</li>
+        </ul>
+    </section>
+
+</div>

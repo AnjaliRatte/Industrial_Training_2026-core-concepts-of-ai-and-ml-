@@ -1,10 +1,446 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<header>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            background: linear-gradient(135deg, #ffe6f0, #fff);
+            color:#333;
+        }
 
-</body>
-</html>
+        header{
+            background: #ff4d88;
+            color:white;
+            padding:30px;
+            text-align:center;
+        }
+
+        h1{
+            margin:0;
+        }
+
+        .container{
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:15px 0;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#ff4d88;
+        }
+
+        pre{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:10px;
+            overflow-x:auto;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#ff4d88;
+            color:white;
+            padding:5px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin:3px;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#ff4d88;
+            font-weight:bold;
+        }
+    </style>
+
+    <h1> Day 3 - REST APIs & JSON Data Extraction</h1>
+    <p>Industrial Training Diary</p>
+</header>
+
+<div class="container">
+
+    <!-- Introduction -->
+
+    <section class="card">
+        <h2> Introduction</h2>
+
+        <p>
+            On the third day of industrial training, I worked with various public REST APIs to retrieve and process real-world data using Python. I learned how to send HTTP requests, parse JSON responses, and extract specific information from large datasets. I explored the Open Library API to obtain book details and display book covers, and the REST Countries API to extract country information, filter data based on population, and categorize countries by region. These practical exercises enhanced my understanding of API integration, JSON data handling, conditional filtering, and data organization, strengthening my Python programming skills and knowledge of working with web-based services.
+        </p>
+    </section>
+
+
+    <!-- Learning Objectives -->
+
+    <section class="card">
+        <h2> Learning Objectives</h2>
+
+        <ul>
+            <li>Understand REST APIs</li>
+            <li>Send HTTP requests using Python</li>
+            <li>Parse JSON responses</li>
+            <li>Extract required fields</li>
+            <li>Filter data using conditions</li>
+            <li>Retrieve images from APIs</li>
+        </ul>
+
+    </section>
+
+
+    <!-- Activity 1 -->
+
+    <section class="card">
+
+        <h2> Activity 1 : Open Library API</h2>
+
+        <p>
+            Search a book using Open Library API and extract:
+
+Book Title
+Author
+First Publish Year
+Edition Count
+Language
+Publisher
+        </p>
+
+        <h3>Task Performed</h3>
+
+        <ul>
+            <li>Search books using title</li>
+            <li>Extract Title</li>
+            <li>Extract Author</li>
+            <li>Extract Publish Year</li>
+            <li>Extract Edition Count</li>
+            <li>Extract Language</li>
+            <li>Extract Publisher</li>
+        </ul>
+
+        <h3> Code</h3>
+
+<pre>
+
+import requests
+
+response = requests.get("https://openlibrary.org/search.json?title=python")
+data = response.json()
+# print(data["docs"])
+result = []
+for info in data["docs"] :
+    row = []
+    if "title" in info:
+        row.append(info["title"])
+    else :
+        row.append("null")
+
+    if "author_name" in info:
+        row.append(info["author_name"])
+    else :
+        row.append("null")
+
+    if "first_publish_year" in info:
+        row.append(info["first_publish_year"])
+    else :
+        row.append("null")
+
+    if "edition_count" in info:
+        row.append(info["edition_count"])
+    else :
+        row.append("null")
+
+    if "language" in info:
+        row.append(info["language"])
+    else :
+        row.append("null")
+
+    result.append(row)
+
+
+
+print(result)
+
+</pre>
+
+        <h3> Output</h3>
+
+<pre>
+
+E:\PycharmProjects\Industrial_Training_2026\.venv\Scripts\python.exe "E:\PycharmProjects\Industrial_Training_2026\python_projects\Day 3\3.1.py"
+[['Learning Python', ['Mark Lutz', 'David Ascher'], 1999, 23, ['ger', 'eng']], ['Python', ['Mark Lutz'], 1998, 13, ['fre', 'eng', 'ger']], ['Python For Data Analysis', ['Wes McKinney'], 2012, 8, ['eng']], ['Fluent Python', ['Luciano Ramalho'], 2015, 6, ['eng']], ['Think Python', ['Allen B. Downey', 'Allen Downey'], 2009, 11, ['eng']], ['Programming Python', ['Mark Lutz'], 1996, 10, ['eng']], ['Python Cookbook', ['Alex Martelli', 'David Ascher', 'David M. Beazley', 'Brian K. Jones'], 2002, 7, ['eng']], ['Black Hat Python', ['Justin Seitz', 'Tim Arnold'], 2014, 3, ['eng', 'pol']], ['Automate the Boring Stuff with Python', ['Al Sweigart'], 2015, 8, ['eng', 'chi']], ['Core Python Programming', ['R. Nageswara Rao'], 2016, 5, ['hin', 'eng']], ['Python crash course', ['Eric Matthes'], 2015, 2, ['eng']], ['Python', ['Joshua Welsh'], 2017, 1, ['eng']], ['Python! python!', ['Steve Chimombo'], 1992, 3, ['eng']], ['Python Crash Course, 2nd Edition', ['Eric Matthes'], 2019, 1, ['eng']], ['Effective Python', ['Brett Slatkin'], 2015, 8, ['eng']], ['Python', ['Byron Francis'], 2016, 1, ['eng']], ['Python Playground', ['Mahesh Venkitachalam'], 2015, 2, ['eng']], ['Head First Python', ['Paul Barry'], 2010, 9, ['ger', 'chi', 'eng']], ['Python Distilled', ['David M. Beazley'], 2021, 3, ['eng']], ['Python Data Science Handbook', ['Jake VanderPlas'], 2016, 2, ['eng']], ['Core Python programming', ['Wesley Chun'], 2006, 2, ['eng']], ['Python Crash Course, 3rd Edition', ['Eric Matthes'], 2022, 1, ['eng']], ['Beginning Python', ['James R. Payne'], 2010, 6, ['eng']], ['Python', ['Martin Evans'], 2018, 10, ['eng']], ['Python Programming', ['Reema Thareja'], 2019, 2, ['eng']], ['Python Basics', ['David Amos', 'Dan Bader', 'Joanna Jablonski', 'Fletcher Heisler'], 2021, 1, ['eng']], ['Python Basics', 'null', 2019, 1, ['eng']], ['Python, The Complete Reference', ['Martin C. Brown'], 2001, 3, ['eng']], ['Python for Everybody', ['Charles R. Severance'], 2016, 4, ['eng', 'spa']], ["Pythons' Autobiography by the Pythons", ['Monty Python', 'Graham Chapman', 'John Cleese', 'Terry Gilliam', 'Eric Idle', 'Terry Jones', 'Michael Palin', 'et al', 'Bob McCabe'], 2003, 18, ['eng', 'und']], ['Introduction to Machine Learning with Python', ['Andreas C. Mueller', 'Sarah Guido'], 2016, 2, ['eng']], ['Python programming', ['John M. Zelle'], 2003, 2, ['eng']], ['Python machine learning', ['Sebastian Raschka'], 2015, 4, ['eng']], ['Python for dummies', ['Stef Maruch', 'Aahz Maruch'], 2006, 5, ['eng']], ['Python for Kids', ['Jason R. Briggs'], 2012, 4, ['eng']], ['Python in a Nutshell', ['Alex Martelli', 'Anna Ravenscroft', 'Steve Holden'], 2002, 8, ['eng']], ['Python', ['Computer Programming Academy'], 2019, 1, ['eng']], ['Python', ['Andy Vickler'], 2021, 2, ['eng']], ['Deep Learning with Python', ['Francois Chollet', 'Matthew Watson'], 2017, 2, ['eng']], ['Python for Geeks', ['Muhammad Asif'], 2021, 2, ['eng']], ['Python', ['Christopher Cheng'], 2013, 4, ['eng']], ['Python', ['Jim Knowlton'], 2008, 3, ['eng']], ['Starting out with Python', ['Tony Gaddis'], 2008, 4, ['eng']], ['Web Scraping with Python', ['Ryan Mitchell'], 2015, 5, ['eng']], ['Python for Beginners', ['Max Coding'], 2020, 1, 'null'], ['Dive into Python', ['Mark Pilgrim'], 2004, 1, ['eng']], ['Python Algorithms', ['Magnus Lie Hetland'], 2010, 4, ['eng']], ['Introducing Python', ['Bill Lubanovic'], 2013, 4, ['eng']], ['Let Us Python', ['Yashavant Kanetkar'], 2019, 2, ['eng']], ['PYTHON Exercises', ['Ray Yao'], 2021, 1, ['eng']], ['Python essential reference', ['David M. Beazley'], 2000, 8, ['eng']], ['Python Programming', ['Sarah Stewart'], 2019, 1, 'null'], ['Python Programming', ['Naveen ,Kumar and Taneja Sheetal'], 2017, 1, 'null'], ['Python Tricks: A Buffet of Awesome Python Features', ['Dan Bader'], 2017, 1, ['eng']], ['Python : Programming', ['iCode Academy', 'Python Language'], 2017, 3, ['eng']], ['Natural Language Processing With Python', ['Edward Loper', 'Steven Bird', 'Ewan Klein'], 2009, 6, ['eng']], ['Python Programming', ['Adam Stewart'], 2016, 2, ['eng']], ['Python', ['Joseph Eddy Fontenrose'], 1959, 7, ['eng']], ['The Python Project', ['Victor Canning'], 1967, 15, ['eng']], ['Starting Out with Python', ['Tony Gaddis'], 2020, 2, ['eng']], ['Data Structures and Algorithms in Python', ['Michael T. Goodrich', 'Roberto Tamassia', 'Michael H Goldwasser'], 2012, 3, ['eng']], ['Intro to Python', ['Programming For Scientists'], 2020, 1, ['eng']], ['Python Programming Crash Course', ['Alex Jaxson'], 2022, 1, ['eng']], ['Python', ['Bradley N. Miller', 'David L. Ranum'], 2013, 1, ['eng']], ['Introduction to Python Programming', ['Gowrishankar S', 'Veena A'], 2018, 5, ['eng']], ['Understanding coding with Python', ['Patricia Harris'], 2016, 1, ['eng']], ['Python All-in-One For Dummies', ['John Shovic', 'Alan Simpson'], 2019, 6, ['eng']], ['Python 201', ['Michael Driscoll'], 2016, 2, ['eng']], ["Python's Party", ['Brian Wildsmith'], 1974, 6, ['und', 'eng']], ['Python Data Science', ['Programming Languages Programming Languages Project'], 2019, 1, ['eng']], ['Python 3', ['James R. Parker'], 2016, 3, ['eng']], ['Curso Intensivo de Python', ['Eric Matthes'], 2016, 1, 'null'], ['Python for Data & Analytics', ['Daniel Groner'], 2022, 2, ['eng']], ['Fundamentals of Python Programming', ['Richard L. Halterman'], 2018, 1, ['eng']], ['Python scripts for Abaqus', ['Gautam Puri'], 2011, 1, ['eng']], ['Python Programming', ['Vijaya Kumara Sarma', 'Vimal Kumar', 'Swati Sharma', 'Shashwat Pathak'], 2021, 5, ['eng']], ['Python for bioinformatics', ['Sebastian Bassi'], 2009, 10, ['eng']], ['Programming in Python 3', ['Mark Summerfield'], 2009, 8, ['eng']], ['Python', ['Andy Vickler'], 2021, 2, ['eng']], ['A Plague of Pythons', ['Frederik Pohl'], 1965, 20, ['eng']], ['Think Like a Programmer, Python Edition', ['V. Anton Spraul'], 'null', 1, ['eng']], ['Introduction To Computation And Programming Using Python', ['John Guttag'], 2013, 3, ['eng']], ['Python for Everyone', ['Cay S. Horstmann', 'Rance D. Necaise'], 2013, 7, ['eng']], ['The Greedy Python', ['Richard Buckley'], 1993, 3, ['eng']], ['Foundations of Python network programming', ['John Goerzen', 'Brandon Rhodes'], 2004, 4, ['eng']], ['Concetti di informatica e fondamenti di Python', ['Cay S. Horstmann', 'Rance D. Necaise'], 'null', 1, ['ita']], ['Python Para Análise de Dados', ['Wes McKinney'], 2000, 1, ['por']], ['Belajar Pemrograman dan Hacking Menggunakan Python', ['Wardana'], 2019, 1, 'null'], ['Game Development Using Python', ['James R. Parker'], 2018, 6, ['eng']], ['Python programming in context', ['Bradley N. Miller'], 2009, 6, ['eng']], ['Python', ['Toby Donaldson'], 2009, 3, ['eng']], ['Clean Code in Python', ['Mariano Anaya'], 2018, 4, ['eng']], ['The Hitchhiker’s Guide To Python', ['Kenneth Reitz', 'Tanya Schlusser'], 2016, 1, ['eng']], ['Python Programming : Advanced Python Applications and Features', ['Coding ACADEMY'], 2019, 2, ['eng']], ['Learn Python 3 the Hard Way', ['Zed Shaw'], 2017, 3, ['eng']], ['The Greedy Python', ['Richard Buckley', 'Eric Carle'], 1985, 1, 'null'], ['Python Basics', ['H. Bhasin'], 2018, 3, ['eng']], ['Monty Python', ['Richard Topping'], 1999, 3, ['eng']], ['Architecture Patterns with Python', ['Harry J.W. Percival', 'Bob Gregory'], 2020, 2, ['eng']], ['Python Para Pentest', ['MORENO'], 2018, 1, 'null']]
+
+Process finished with exit code 0
+
+</pre>
+
+    </section>
+
+
+    <!-- Activity 2 -->
+
+    <section class="card">
+
+        <h2> Activity 2 : Display Book Cover</h2>
+
+        <p>
+            The cover_i value obtained from the Open Library API was used as the unique identifier to construct the book cover URL. By appending this value to the Open Library Covers API URL format, the corresponding book cover image was successfully retrieved and displayed.
+        </p>
+
+        <h3> Code</h3>
+
+<pre>
+
+import requests
+import os
+
+response = requests.get("https://openlibrary.org/search.json?title=python")
+
+data = response.json()
+
+result = []
+for info in data["docs"]:
+    row = [
+        info["title"]
+    ]
+    if "cover_i" in info :
+        cover_i = str(info["cover_i"])
+        url = "https://covers.openlibrary.org/b/id/" + cover_i + "-L.jpg"
+        row.append(url)
+        result.append(row)
+    else :
+        row.append("null")
+
+
+print(result)
+
+folder = "book covers"
+os.makedirs(folder, exist_ok=True)
+
+for book in result :
+    title = book[0] + ".jpg"
+    cover = book[1]
+    co_url = requests.get(cover)
+    file_path = os.path.join(folder, title)
+    with open (file_path,"wb") as f:
+        f.write(co_url.content)
+        f.close()
+
+
+</pre>
+
+
+
+    </section>
+
+
+    <!-- Activity 3 -->
+
+    <section class="card">
+
+        <h2> Activity 3 : REST Countries API</h2>
+
+        <p>
+            Data was fetched from the REST Countries API using an HTTP GET request in Python. The JSON response received from the API was parsed to extract relevant details such as the country name, capital city, population, and area. The extracted information was then organized into a list of lists, where each inner list represented a country and contained its corresponding details. This structured format made the data easy to display, access, and process for further analysis.
+        </p>
+
+        <table border="1" cellpadding="10">
+
+            <tr>
+
+                <th>Extracted Fields</th>
+
+            </tr>
+
+            <tr><td>Country Name</td></tr>
+
+            <tr><td>Capital</td></tr>
+
+            <tr><td>Population</td></tr>
+
+            <tr><td>Area</td></tr>
+
+        </table>
+
+        <br>
+
+        <h3> Code</h3>
+
+<pre>
+
+import requests
+
+# API call
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers={
+        "Authorization": "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+
+# result list
+result = []
+
+# loop through countries
+for info in data["data"]["objects"]:
+
+    # ---- Country Name ----
+    country_name = info.get("names", {}).get("common", "N/A")
+
+    # ---- Capital City ----
+    capitals = info.get("capitals", [])
+    if capitals:
+        capital_name = capitals[0].get("name", "N/A")
+    else:
+        capital_name = "N/A"
+
+    # ---- Population ----
+    population = info.get("population", "N/A")
+
+    # ---- Area ----
+    area = info.get("area", {}).get("kilometers", "N/A")
+
+    # ---- create row ----
+    row = [country_name, capital_name, population, area]
+
+    result.append(row)
+
+# print result
+for r in result:
+    print(r)
+
+
+    </section>
+
+
+    <!-- Activity 4 -->
+
+    <section class="card">
+
+        <h2> Activity 4 : Countries with Population Greater Than 50 Million</h2>
+
+        <p>
+            The program filtered the country data by checking the population value of each country obtained from the REST Countries API. It iterated through the list of countries and used a conditional statement to compare each country's population with 50 million. If the population was greater than 50 million, the country's name was added to the result and displayed. This demonstrated the use of conditional filtering to extract specific information from a large dataset.
+        </p>
+
+        <h3>💻 Code</h3>
+
+<pre>
+
+import requests
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers = {
+        "Authorization" : "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+# print(data)
+
+result = []
+
+for info in data["data"]["objects"]:
+    country = []
+    popu = info.get("population")
+    if popu > 50000000:
+        country.append(info.get("names").get("common"))
+        country.append(popu)
+        result.append(country)
+print(result)
+
+
+</pre>
+
+
+    </section>
+
+
+    <!-- Activity 5 -->
+
+    <section class="card">
+
+        <h2> Activity 5 : Filter Countries by Region</h2>
+
+        <p>
+            The program takes the region name as input from the user. It filters the country data by comparing the entered region with the region field in the API data. When "Africa" is entered, only countries belonging to the Africa region are selected and displayed with their details.
+        </p>
+
+        <h3> Code</h3>
+
+<pre>
+
+import requests
+
+response = requests.get(
+    "https://api.restcountries.com/countries/v5?limit=100&pretty=1",
+    headers = {
+        "Authorization" : "Bearer rc_live_ead02b60371441b9888fbb28757ed6c2"
+    }
+)
+
+data = response.json()
+# print(data)
+
+regions = []
+
+for info in data["data"]["objects"]:
+    r_name = info.get("region")
+    if r_name not in regions:
+        regions.append(r_name)
+# print(regions)
+
+countries = {}
+for region in regions :
+    country = []
+    for info in data["data"]["objects"]:
+        if info.get("region") == region :
+            country.append(info.get("names").get("common"))
+    countries[region]= country
+
+# print(countries)
+
+reg = input("Enter any region ['Asia', 'Europe', 'Africa', 'Oceania', 'Americas', 'Antarctic'] :  ")
+print("Countries in region " ,  reg, " are : ", countries[reg])
+
+
+
+    </section>
+
+
+    <!-- Key Learnings -->
+
+    <section class="card">
+
+        <h2> Key Learnings</h2>
+
+        <ul>
+
+            <li>Working with public REST APIs</li>
+
+            <li>JSON Parsing</li>
+
+            <li>Nested Dictionary Handling</li>
+
+            <li>Data Extraction</li>
+
+            <li>Conditional Filtering</li>
+
+            <li>Image Retrieval using API</li>
+
+            <li>Python Requests Library</li>
+
+        </ul>
+
+    </section>
+
+</div>
