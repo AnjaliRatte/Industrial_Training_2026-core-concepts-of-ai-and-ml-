@@ -1,225 +1,497 @@
-<header>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 13 - Diabetes Prediction Using ML</title>
+
     <style>
-        body{
+        body {
             font-family: Arial, sans-serif;
-            margin:0;
-            padding:0;
+            margin: 0;
+            padding: 0;
             background: linear-gradient(135deg, #ffe6f0, #fff);
-            color:#333;
+            color: #333;
         }
 
-        header{
+        header {
             background: #ff4d88;
-            color:white;
-            padding:30px;
-            text-align:center;
+            color: white;
+            padding: 30px;
+            text-align: center;
         }
 
-        h1{
-            margin:0;
+        h1 {
+            margin: 0;
         }
 
-        .container{
-            padding:20px;
+        .container {
+            padding: 20px;
         }
 
-        .card{
-            background:white;
-            padding:20px;
-            margin:15px 0;
-            border-radius:15px;
-            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        h2{
-            color:#ff4d88;
+        h2 {
+            color: #ff4d88;
         }
 
-        pre{
-            background:#f4f4f4;
-            padding:15px;
-            border-radius:10px;
-            overflow-x:auto;
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+            white-space: pre;
         }
 
-        .tag{
-            display:inline-block;
-            background:#ff4d88;
-            color:white;
-            padding:5px 10px;
-            border-radius:20px;
-            font-size:12px;
-            margin:3px;
+        code {
+            font-family: Consolas, monospace;
         }
 
-        a{
-            display:inline-block;
-            margin-top:20px;
-            text-decoration:none;
-            color:#ff4d88;
-            font-weight:bold;
+        .tag {
+            display: inline-block;
+            background: #ff4d88;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 3px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #ff4d88;
+            font-weight: bold;
+        }
+
+        .note {
+            background: #fff0f6;
+            padding: 15px;
+            border-radius: 10px;
         }
     </style>
+</head>
 
-    <h1> Day 12 - Machine Learning Classification Pipeline & Model Benchmarking</h1>
+<body>
+
+<header>
+    <h1>🤖 Day 13 - Diabetes Prediction Using Machine Learning</h1>
     <p>Industrial Training Diary</p>
+
+    <span class="tag">Classification</span>
+    <span class="tag">Scikit-learn</span>
+    <span class="tag">Model Training</span>
+    <span class="tag">Model Evaluation</span>
 </header>
 
 <div class="container">
 
     <!-- Introduction -->
+
     <section class="card">
-        <h2> Introduction</h2>
+        <h2>📖 Introduction</h2>
+
         <p>
-            On the twelfth day of industrial training, I advanced into implementing supervised machine learning pipelines using the <span class="code-block">scikit-learn</span> library. I focused on building an end-to-end predictive framework starting from raw data ingestion and manual dataset shuffling to train-test partition splits. Using the Pima Indians Diabetes Dataset, I evaluated and compared multiple prominent classification algorithms. This exercise provided practical experience in model initialization, fitting training data, predicting unseen validation sets, and quantitatively measuring performance using accuracy metrics.
+            Today, I continued working with the Pima Indians Diabetes
+            Dataset and explored machine learning classification
+            algorithms. I separated the dataset into input features
+            and the target variable and performed an 80:20
+            training-testing split. I trained multiple classification
+            models using Scikit-learn and evaluated their performance
+            using accuracy scores. The algorithms included Logistic
+            Regression, Support Vector Classification, Stochastic
+            Gradient Descent, Gaussian Naive Bayes, K-Nearest
+            Neighbors, Decision Tree, and Random Forest.
+            This activity helped me understand how different
+            classification algorithms can be applied to the same
+            dataset and compared using a common evaluation metric.
         </p>
     </section>
 
     <!-- Learning Objectives -->
+
     <section class="card">
-        <h2> Learning Objectives</h2>
+        <h2>🎯 Learning Objectives</h2>
+
         <ul>
-            <li>Implement manual data shuffling techniques using index permutations</li>
-            <li>Construct customized train-test data partition ratios without relying on library helper hooks</li>
-            <li>Understand the initialization parameters of multiple classification algorithms</li>
-            <li>Train multiple estimators including Linear models, Naive Bayes, Instance-based, Tree-based, and Ensemble classifiers</li>
-            <li>Evaluate model output metrics using comparative accuracy benchmarking indicators</li>
+            <li>Understand machine learning classification</li>
+            <li>Train models using Scikit-learn</li>
+            <li>Understand Logistic Regression</li>
+            <li>Explore Support Vector Classification</li>
+            <li>Learn Stochastic Gradient Descent Classification</li>
+            <li>Understand Gaussian Naive Bayes</li>
+            <li>Explore K-Nearest Neighbors</li>
+            <li>Understand Decision Tree and Random Forest</li>
+            <li>Evaluate models using accuracy score</li>
+            <li>Compare classification model performance</li>
         </ul>
     </section>
 
     <!-- Activity 1 -->
+
     <section class="card">
-        <h2> Activity 1: Data Preparation, Custom Shuffling, and Splitting Pipeline</h2>
+        <h2>📂 Activity 1: Dataset Preparation</h2>
+
         <p>
-            Load the classification dataset from an external repository, separate target features from class outputs, randomly shuffle observations, and perform an 80-20 train-test boundary partition split.
+            I loaded the Diabetes Dataset and separated the
+            independent features from the dependent target variable.
+            The dataset was shuffled using NumPy and divided into
+            training and testing sets in an 80:20 ratio.
         </p>
 
-        <h3>Tasks Performed</h3>
-        <ul>
-            <li>Isolate the dependent target variable label using dataframe drop operations</li>
-            <li>Generate random index orders via <span class="code-block">np.random.permutation()</span> to ensure clean data mixing</li>
-            <li>Reorder target values using coordinate integer lookups (<span class="code-block">.iloc</span>)</li>
-            <li>Calculate splitting boundaries mathematically to separate training and evaluation blocks</li>
-        </ul>
+        <h3>💻 Code</h3>
 
-        <h3> Code Split</h3>
-<pre>
-import pandas as pd
+<pre><code>import pandas as pd
 import numpy as np
 
-# Load the target diabetes dataset
-data = pd.read_csv("https://raw.githubusercontent.com/npradaschnor/Pima-Indians-Diabetes-Dataset/refs/heads/master/diabetes.csv")
+data = pd.read_csv(
+    "https://raw.githubusercontent.com/npradaschnor/"
+    "Pima-Indians-Diabetes-Dataset/refs/heads/master/diabetes.csv"
+)
 
-# Separate features (x) and target labels (y)
 x = data.drop("Outcome", axis=1)
 y = data["Outcome"]
 
-# Generate random index permutations for shuffling
 indices = np.random.permutation(len(data))
+
 x = x.iloc[indices]
 y = y.iloc[indices]
 
-# Calculate an 80% split index threshold
 split_index = int(len(data) * 0.80)
 
-# Slice the partitioned arrays into train and test spaces
 x_train = x.iloc[:split_index]
 y_train = y.iloc[:split_index]
-x_test = x.iloc[split_index:]
-y_test = y.iloc[split_index:]
 
-print(f"Data split successfully. Training rows: {len(x_train)}, Testing rows: {len(x_test)}")
-</pre>
+x_test = x.iloc[split_index:]
+y_test = y.iloc[split_index:]</code></pre>
+
+        <h3>📊 Output</h3>
+
+<pre><code>Training Features: (614, 8)
+Training Target:   (614,)
+
+Testing Features:  (154, 8)
+Testing Target:    (154,)</code></pre>
     </section>
 
     <!-- Activity 2 -->
+
     <section class="card">
-        <h2> Activity 2: Multi-Model Training and Accuracy Benchmarking</h2>
+        <h2>📈 Activity 2: Logistic Regression</h2>
+
         <p>
-            Train eight distinct classification algorithms on the prepared dataset, execute predictive passes on testing rows, and compute comparative accuracy scores.
+            I trained a Logistic Regression classifier using
+            the training dataset and generated predictions
+            for the testing dataset. Its performance was
+            evaluated using accuracy score.
         </p>
 
-        <h3>Tasks Performed</h3>
-        <ul>
-            <li>Implement traditional baseline linear systems like Logistic Regression and Stochastic Gradient Descent (SGD)</li>
-            <li>Train distance-based and probability-based algorithms including K-Nearest Neighbors (KNN) and Gaussian Naive Bayes</li>
-            <li>Deploy single and ensemble tree systems including Decision Trees and Random Forests</li>
-            <li>Train Support Vector Classifier models using structured iteration constraints</li>
-            <li>Benchmark all classifier performance outputs using the <span class="code-block">accuracy_score</span> metric</li>
-        </ul>
+        <h3>💻 Code</h3>
 
-        <h3> Code Split</h3>
-<pre>
-from sklearn.svm import SVC
-from sklearn.linear_model import LogisticRegression, SGDClassifier
+<pre><code>from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
-from sklearn.naive_bayes import GaussianNB
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn import svm
 
-# 1. Logistic Regression Classification
 lr = LogisticRegression(max_iter=1000)
+
 lr.fit(x_train, y_train)
+
 predict = lr.predict(x_test)
-print("logistic regression : ", accuracy_score(y_test, predict))
 
-# 2. Support Vector Classification (SVC)
+print("logistic regression : ",
+      accuracy_score(y_test, predict))</code></pre>
+
+        <h3>📊 Output</h3>
+
+<pre><code>logistic regression : [Your accuracy score]</code></pre>
+    </section>
+
+    <!-- Activity 3 -->
+
+    <section class="card">
+        <h2>🧠 Activity 3: Support Vector Classification</h2>
+
+        <p>
+            I applied Support Vector Classification to
+            identify a decision boundary between the two
+            diabetes outcome classes.
+        </p>
+
+        <h3>💻 Code</h3>
+
+<pre><code>from sklearn.svm import SVC
+
 clf = SVC(max_iter=1000)
+
 clf.fit(x_train, y_train)
+
 prediction = clf.predict(x_test)
-print("svc                 : ", accuracy_score(y_test, prediction))
 
-# 3. Stochastic Gradient Descent Classifier (SGDC)
+print("svc : ", accuracy_score(y_test, prediction))</code></pre>
+
+        <h3>📊 Output</h3>
+
+<pre><code>svc : [Your accuracy score]</code></pre>
+    </section>
+
+    <!-- Activity 4 -->
+
+    <section class="card">
+        <h2>⚙️ Activity 4: SGD Classifier</h2>
+
+        <p>
+            I trained a Stochastic Gradient Descent
+            classifier and evaluated its predictions
+            on the testing dataset.
+        </p>
+
+        <h3>💻 Code</h3>
+
+<pre><code>from sklearn.linear_model import SGDClassifier
+
 gc = SGDClassifier(max_iter=1000)
+
 gc.fit(x_train, y_train)
+
 prediction = gc.predict(x_test)
-print("SGDC                : ", accuracy_score(y_test, prediction))
 
-# 4. Naive Bayes Classifier
+print("SGDC : ", accuracy_score(y_test, prediction))</code></pre>
+
+        <h3>📊 Output</h3>
+
+<pre><code>SGDC : [Your accuracy score]</code></pre>
+    </section>
+
+    <!-- Activity 5 -->
+
+    <section class="card">
+        <h2>📊 Activity 5: Gaussian Naive Bayes</h2>
+
+        <p>
+            I implemented Gaussian Naive Bayes, a probabilistic
+            classification algorithm, and measured its
+            performance using accuracy score.
+        </p>
+
+        <h3>💻 Code</h3>
+
+<pre><code>from sklearn.naive_bayes import GaussianNB
+
 nb = GaussianNB()
+
 nb.fit(x_train, y_train)
+
 prediction = nb.predict(x_test)
-print("naive bayes         : ", accuracy_score(y_test, prediction))
 
-# 5. K-Nearest Neighbors Classifier (KNN)
+print("naive bayes : ",
+      accuracy_score(y_test, prediction))</code></pre>
+
+        <h3>📊 Output</h3>
+
+<pre><code>naive bayes : [Your accuracy score]</code></pre>
+    </section>
+
+    <!-- Activity 6 -->
+
+    <section class="card">
+        <h2>🔍 Activity 6: K-Nearest Neighbors</h2>
+
+        <p>
+            I trained a K-Nearest Neighbors classifier
+            that predicts the class of an observation
+            based on its neighboring data points.
+        </p>
+
+        <h3>💻 Code</h3>
+
+<pre><code>from sklearn.neighbors import KNeighborsClassifier
+
 knn = KNeighborsClassifier()
+
 knn.fit(x_train, y_train)
+
 prediction = knn.predict(x_test)
-print("knn                 : ", accuracy_score(y_test, prediction))
 
-# 6. Decision Tree Classifier
+print("knn : ", accuracy_score(y_test, prediction))</code></pre>
+
+        <h3>📊 Output</h3>
+
+<pre><code>knn : [Your accuracy score]</code></pre>
+    </section>
+
+    <!-- Activity 7 -->
+
+    <section class="card">
+        <h2>🌳 Activity 7: Decision Tree Classifier</h2>
+
+        <p>
+            I used a Decision Tree classifier to learn
+            decision rules from the training dataset
+            and predict diabetes outcomes.
+        </p>
+
+        <h3>💻 Code</h3>
+
+<pre><code>from sklearn.tree import DecisionTreeClassifier
+
 dt = DecisionTreeClassifier()
+
 dt.fit(x_train, y_train)
+
 prediction = dt.predict(x_test)
-print("decision tree       : ", accuracy_score(y_test, prediction))
 
-# 7. Random Forest Classifier
+print("decision tree : ",
+      accuracy_score(y_test, prediction))</code></pre>
+
+        <h3>📊 Output</h3>
+
+<pre><code>decision tree : [Your accuracy score]</code></pre>
+    </section>
+
+    <!-- Activity 8 -->
+
+    <section class="card">
+        <h2>🌲 Activity 8: Random Forest Classifier</h2>
+
+        <p>
+            I trained a Random Forest classifier, which
+            combines multiple decision trees to produce
+            predictions. Its accuracy was evaluated
+            using the testing dataset.
+        </p>
+
+        <h3>💻 Code</h3>
+
+<pre><code>from sklearn.ensemble import RandomForestClassifier
+
 rf = RandomForestClassifier()
-rf.fit(x_train, y_train)
-prediction = rf.predict(x_test)
-print("random forest       : ", accuracy_score(y_test, prediction))
 
-# 8. Standard Support Vector Machine (SVM)
+rf.fit(x_train, y_train)
+
+prediction = rf.predict(x_test)
+
+print("random forest : ",
+      accuracy_score(y_test, prediction))</code></pre>
+
+        <h3>📊 Output</h3>
+
+<pre><code>random forest : [Your accuracy score]</code></pre>
+    </section>
+
+    <!-- Activity 9 -->
+
+    <section class="card">
+        <h2>🧪 Activity 9: SVM Classifier</h2>
+
+        <p>
+            I also trained an SVM classifier using
+            Scikit-learn and evaluated its predictions.
+        </p>
+
+        <h3>💻 Code</h3>
+
+<pre><code>from sklearn import svm
+
 svm_model = svm.SVC()
+
 svm_model.fit(x_train, y_train)
+
 prediction = svm_model.predict(x_test)
-print("svm                 : ", accuracy_score(y_test, prediction))
-</pre>
+
+print("svm : ", accuracy_score(y_test, prediction))</code></pre>
+
+        <h3>📊 Output</h3>
+
+<pre><code>svm : [Your accuracy score]</code></pre>
+    </section>
+
+    <!-- Model Comparison -->
+
+    <section class="card">
+        <h2>📋 Activity 10: Model Performance Comparison</h2>
+
+        <p>
+            I compared the accuracy scores of the
+            classification algorithms to understand
+            how different models performed on the
+            same dataset.
+        </p>
+
+        <table border="1" cellpadding="10"
+               cellspacing="0"
+               style="border-collapse:collapse;width:100%;">
+
+            <tr>
+                <th>Algorithm</th>
+                <th>Accuracy</th>
+            </tr>
+
+            <tr><td>Logistic Regression</td><td>--</td></tr>
+            <tr><td>SVC</td><td>--</td></tr>
+            <tr><td>SGD Classifier</td><td>--</td></tr>
+            <tr><td>Gaussian Naive Bayes</td><td>--</td></tr>
+            <tr><td>KNN</td><td>--</td></tr>
+            <tr><td>Decision Tree</td><td>--</td></tr>
+            <tr><td>Random Forest</td><td>--</td></tr>
+            <tr><td>SVM</td><td>--</td></tr>
+
+        </table>
+
+        <p class="note">
+            Note: Accuracy values depend on the random
+            train-test split and model configuration.
+        </p>
     </section>
 
     <!-- Key Learnings -->
+
     <section class="card">
-        <h2> Key Learnings</h2>
+        <h2>💡 Key Learnings</h2>
+
         <ul>
-            <li>How to isolate feature columns and labels manually for machine learning analysis</li>
-            <li>Shuffling raw data matrices using row index permutations to avoid order bias</li>
-            <li>Constructing explicit training and testing split slices using mathematical boundary indices</li>
-            <li>Applying the uniform <span class="code-block">.fit()</span> and <span class="code-block">.predict()</span> workflow API across different Scikit-Learn models</li>
-            <li>Using optimization limitations like <span class="code-block">max_iter=1000</span> to ensure gradient convergence</li>
-            <li>Benchmarking multiple algorithms on a single tracking dataset using unified accuracy indicators</li>
+            <li>Training classification models using Scikit-learn</li>
+            <li>Understanding supervised machine learning</li>
+            <li>Logistic Regression classification</li>
+            <li>Support Vector Classification</li>
+            <li>Stochastic Gradient Descent</li>
+            <li>Gaussian Naive Bayes</li>
+            <li>K-Nearest Neighbors classification</li>
+            <li>Decision Tree and Random Forest</li>
+            <li>Generating predictions using trained models</li>
+            <li>Evaluating model performance using accuracy</li>
+            <li>Comparing different classification algorithms</li>
         </ul>
     </section>
 
+    <!-- Reflection -->
+
+    <section class="card">
+        <h2>📝 Reflection</h2>
+
+        <p>
+            Today's activity helped me understand how multiple
+            machine learning classification algorithms can be
+            applied to the same dataset. I gained practical
+            experience in training models, generating predictions,
+            and evaluating their performance. I explored both
+            linear and nonlinear classification approaches and
+            observed how different algorithms use different
+            strategies for classification. Comparing accuracy
+            scores helped me understand the importance of
+            model evaluation. This activity strengthened
+            my practical understanding of supervised
+            machine learning.
+        </p>
+    </section>
+
 </div>
+
+</body>
+</html>
