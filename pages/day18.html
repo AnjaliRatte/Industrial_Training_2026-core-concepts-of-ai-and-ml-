@@ -1,6 +1,5 @@
 <header>
-
-   <style>
+    <style>
         body{
             font-family: Arial, sans-serif;
             margin:0;
@@ -53,6 +52,13 @@
             margin:3px;
         }
 
+        .code-block{
+            background:#f4f4f4;
+            padding:2px 6px;
+            border-radius:4px;
+            font-family: monospace;
+        }
+
         a{
             display:inline-block;
             margin-top:20px;
@@ -62,264 +68,150 @@
         }
     </style>
 
-
-    <h1>🌐 Day 3 - REST APIs & JSON Data Extraction</h1>
+    <h1> Day 18 - Marketing Campaign Dataset Processing, Feature Engineering & Categorical Encoding</h1>
     <p>Industrial Training Diary</p>
 </header>
 
 <div class="container">
 
     <!-- Introduction -->
-
     <section class="card">
-        <h2>📖 Introduction</h2>
-
+        <h2> Introduction</h2>
         <p>
-            Write 5–8 lines about what you learned today.
-            Mention REST APIs, JSON responses, Python requests,
-            extracting data, filtering information, and working with
-            book and country datasets.
+            On the eighteenth day of industrial training, I performed end-to-end data auditing, cleaning, and feature engineering on a tab-delimited marketing campaign dataset. I handled missing values using skewness-aware statistical imputation, inspected continuous/categorical feature distributions, validated data sanity constraints, engineered customized age-group features, and applied label encoding to prepare predictors for machine learning pipelines.
         </p>
     </section>
-
 
     <!-- Learning Objectives -->
-
     <section class="card">
-        <h2>🎯 Learning Objectives</h2>
-
+        <h2> Learning Objectives</h2>
         <ul>
-            <li>Understand REST APIs</li>
-            <li>Send HTTP requests using Python</li>
-            <li>Parse JSON responses</li>
-            <li>Extract required fields</li>
-            <li>Filter data using conditions</li>
-            <li>Retrieve images from APIs</li>
+            <li>Load tab-separated value (<span class="code-block">.csv</span> with <span class="code-block">delimiter="\t"</span>) datasets using Pandas</li>
+            <li>Analyze distribution skewness to select appropriate missing value imputation strategies (Median vs. Mean)</li>
+            <li>Audit numerical and categorical variables for invalid entries, outliers, and boundary anomalies</li>
+            <li>Engineer custom features by transforming birth year attributes into demographic age groups</li>
+            <li>Encode qualitative categorical features using Scikit-Learn's <span class="code-block">LabelEncoder</span> and export the processed data</li>
         </ul>
-
     </section>
-
 
     <!-- Activity 1 -->
-
     <section class="card">
-
-        <h2>📚 Activity 1 : Open Library API</h2>
-
+        <h2> Activity 1: Dataset Auditing, Skewness Analysis & Missing Value Imputation</h2>
         <p>
-            Write 2–3 lines describing this activity.
+            Load the tab-separated dataset, calculate missing value distributions, analyze attribute skewness to determine the imputation strategy, and visualize income data using Matplotlib.
         </p>
 
-        <h3>Task Performed</h3>
-
+        <h3>Tasks Performed</h3>
         <ul>
-            <li>Search books using title</li>
-            <li>Extract Title</li>
-            <li>Extract Author</li>
-            <li>Extract Publish Year</li>
-            <li>Extract Edition Count</li>
-            <li>Extract Language</li>
-            <li>Extract Publisher</li>
+            <li>Import tab-delimited dataset (<span class="code-block">marketing_campaign.csv</span>) and inspect structural dimensions</li>
+            <li>Identify missing value counts and evaluate skewness on continuous variables (<span class="code-block">Income</span>)</li>
+            <li>Impute missing numerical values using median imputation due to high positive skewness ($6.76$)</li>
+            <li>Plot distribution charts using Matplotlib line plots to visualize income spread across dataset indices</li>
         </ul>
 
-        <h3>💻 Code</h3>
-
+        <h3> Code</h3>
 <pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
-Paste your code here
+# Load tab-delimited marketing campaign dataset
+df = pd.read_csv("marketing_campaign.csv", delimiter="\t")
 
+# Structural Inspection
+print("Dataset Shape :", df.shape)
+print("Missing Values per Column:\n", df.isnull().sum())
+
+# Skewness Analysis for Imputation Strategy
+print("Income Mean   :", df["Income"].mean())
+print("Income Median :", df["Income"].median())
+print("Income Skew   :", df["Income"].skew())  # Skew > 1 indicates highly skewed data
+
+# Visualize Income Distribution
+plt.figure(figsize=(10, 5))
+plt.plot(df["Income"].dropna())
+plt.xlabel("Data Points (Rows)")
+plt.ylabel("Income")
+plt.title("Income Line Graph")
+plt.show()
+
+# Impute missing values using median due to high skewness
+df["Income"] = df["Income"].fillna(df["Income"].median())
 </pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
     </section>
-
 
     <!-- Activity 2 -->
-
     <section class="card">
-
-        <h2>🖼 Activity 2 : Display Book Cover</h2>
-
+        <h2> Activity 2: Data Quality Auditing, Feature Engineering & Label Encoding</h2>
         <p>
-            Briefly explain how cover_i was used to generate
-            the image URL.
+            Audit dataset entries for invalid records, engineer an age-group demographic feature from birth years, apply label encoding across qualitative categories, and split predictor features from targets.
         </p>
 
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📷 Output / Screenshot</h3>
-
-        <div class="image-placeholder">
-
-            Paste Book Cover Screenshot Here
-
-        </div>
-
-    </section>
-
-
-    <!-- Activity 3 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 3 : REST Countries API</h2>
-
-        <p>
-            Describe how country data was fetched and organized.
-        </p>
-
-        <table border="1" cellpadding="10">
-
-            <tr>
-
-                <th>Extracted Fields</th>
-
-            </tr>
-
-            <tr><td>Country Name</td></tr>
-
-            <tr><td>Capital</td></tr>
-
-            <tr><td>Population</td></tr>
-
-            <tr><td>Area</td></tr>
-
-        </table>
-
-        <br>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 4 -->
-
-    <section class="card">
-
-        <h2>👥 Activity 4 : Countries with Population Greater Than 50 Million</h2>
-
-        <p>
-            Explain the filtering logic used in the program.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 5 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 5 : Filter Countries by Region</h2>
-
-        <p>
-            Explain how user input was taken and countries
-            belonging to the Africa region were displayed.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Key Learnings -->
-
-    <section class="card">
-
-        <h2>💡 Key Learnings</h2>
-
+        <h3>Tasks Performed</h3>
         <ul>
-
-            <li>Working with public REST APIs</li>
-
-            <li>JSON Parsing</li>
-
-            <li>Nested Dictionary Handling</li>
-
-            <li>Data Extraction</li>
-
-            <li>Conditional Filtering</li>
-
-            <li>Image Retrieval using API</li>
-
-            <li>Python Requests Library</li>
-
+            <li>Audit numerical boundaries to check for invalid records such as negative income or future birth years</li>
+            <li>Engineer custom categorical feature (<span class="code-block">age_group</span>) using birth year transformations</li>
+            <li>Encode categorical variables into discrete numeric integers using Scikit-Learn's <span class="code-block">LabelEncoder</span></li>
+            <li>Separate predictor feature matrix ($X$) from binary campaign response labels ($y$) and export cleaned output</li>
         </ul>
 
+        <h3> Code</h3>
+<pre>
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+
+# Data Quality Check: Inspect invalid ages or negative income
+invalid_birth_years = df[df["Year_Birth"] > 2026]
+negative_incomes = df[df["Income"] < 0]
+
+# Feature Engineering: Calculate age and categorize into age groups
+def calculate_age(year):
+    return int(2026 - year)
+
+def get_age_group(year):
+    age = calculate_age(year)
+    if age < 18:
+        return "Child"
+    elif age < 30:
+        return "Young Adult"
+    elif age < 50:
+        return "Adult"
+    else:
+        return "Senior"
+
+# Apply age grouping transformation
+df["Year_Birth"] = df["Year_Birth"].astype(int)
+df["age_group"] = df["Year_Birth"].apply(get_age_group)
+
+# Categorical Encoding using LabelEncoder
+le = LabelEncoder()
+categorical_columns = df.select_dtypes(include=["object", "string"]).columns
+
+for column in categorical_columns:
+    df[column] = le.fit_transform(df[column])
+
+# Separate Features (X) and Target Label (y)
+X = df.drop(columns={"Response"})
+y = df["Response"]
+
+print("\nFeatures (X) Shape:", X.shape)
+print("Target (y) Shape  :", y.shape)
+
+# Export processed dataset
+df.to_csv("customer_processed.csv", index=False)
+print("Processed dataset saved successfully as 'customer_processed.csv'.")
+</pre>
     </section>
 
-
-    <!-- Reflection -->
-
+    <!-- Key Learnings -->
     <section class="card">
-
-        <h2>📝 Reflection</h2>
-
-        <p>
-
-            Write 5–6 lines describing your overall learning
-            experience, challenges faced, and how today's
-            activities improved your understanding of APIs.
-
-        </p>
-
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>Parsing custom-delimited dataset files using Pandas <span class="code-block">read_csv</span> parameters</li>
+            <li>Understanding why skewed distributions ($skew > 1$) require median imputation rather than mean imputation to avoid bias from outliers</li>
+            <li>Auditing data integrity constraints to identify invalid entries, negative values, and structural anomalies</li>
+            <li>Performing domain-specific feature engineering to derive meaningful categorical groups (<span class="code-block">age_group</span>) from raw numerical attributes</li>
+            <li>Encoding multi-class qualitative attributes into numerical matrices prior to model partitioning and data export</li>
+        </ul>
     </section>
 
 </div>

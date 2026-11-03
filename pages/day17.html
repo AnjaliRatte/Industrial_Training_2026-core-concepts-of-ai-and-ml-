@@ -1,6 +1,5 @@
 <header>
-
-   <style>
+    <style>
         body{
             font-family: Arial, sans-serif;
             margin:0;
@@ -53,6 +52,13 @@
             margin:3px;
         }
 
+        .code-block{
+            background:#f4f4f4;
+            padding:2px 6px;
+            border-radius:4px;
+            font-family: monospace;
+        }
+
         a{
             display:inline-block;
             margin-top:20px;
@@ -62,264 +68,117 @@
         }
     </style>
 
-
-    <h1>🌐 Day 3 - REST APIs & JSON Data Extraction</h1>
+    <h1> Day 17 - Deep Learning Essentials: Building Artificial Neural Networks (ANN) with Keras</h1>
     <p>Industrial Training Diary</p>
 </header>
 
 <div class="container">
 
     <!-- Introduction -->
-
     <section class="card">
-        <h2>📖 Introduction</h2>
-
+        <h2> Introduction</h2>
         <p>
-            Write 5–8 lines about what you learned today.
-            Mention REST APIs, JSON responses, Python requests,
-            extracting data, filtering information, and working with
-            book and country datasets.
+            On the seventeenth day of industrial training, I transitioned into Deep Learning by constructing my first Artificial Neural Network (ANN) using Keras and TensorFlow. I built a Multi-Layer Perceptron (MLP) architecture to perform binary classification on the Pima Indians Diabetes dataset. The task involved loading raw numerical array data using NumPy, partitioning train-test splits, designing a dense neural network layout, configuring optimization parameters, and evaluating overall classification accuracy and loss performance.
         </p>
     </section>
-
 
     <!-- Learning Objectives -->
-
     <section class="card">
-        <h2>🎯 Learning Objectives</h2>
-
+        <h2> Learning Objectives</h2>
         <ul>
-            <li>Understand REST APIs</li>
-            <li>Send HTTP requests using Python</li>
-            <li>Parse JSON responses</li>
-            <li>Extract required fields</li>
-            <li>Filter data using conditions</li>
-            <li>Retrieve images from APIs</li>
+            <li>Load comma-separated numerical datasets into NumPy matrices using <span class="code-block">loadtxt</span></li>
+            <li>Construct Sequential neural network architectures using TensorFlow Keras <span class="code-block">Dense</span> layers</li>
+            <li>Understand non-linear activation functions including Rectified Linear Unit (<span class="code-block">ReLU</span>) and <span class="code-block">Sigmoid</span></li>
+            <li>Configure neural network training using <span class="code-block">binary_crossentropy</span> loss, <span class="code-block">Adam</span> optimizer, and accuracy metrics</li>
+            <li>Train neural network models over fixed <span class="code-block">epochs</span> and <span class="code-block">batch_size</span> parameters, evaluating holdout performance</li>
         </ul>
-
     </section>
-
 
     <!-- Activity 1 -->
-
     <section class="card">
-
-        <h2>📚 Activity 1 : Open Library API</h2>
-
+        <h2> Activity 1: Dataset Partitioning & Neural Network Architecture Setup</h2>
         <p>
-            Write 2–3 lines describing this activity.
+            Import numerical diagnostic features from the Pima Indians Diabetes dataset, split observations into feature and target matrices, and set up a reproducible train-test split.
         </p>
 
-        <h3>Task Performed</h3>
-
+        <h3>Tasks Performed</h3>
         <ul>
-            <li>Search books using title</li>
-            <li>Extract Title</li>
-            <li>Extract Author</li>
-            <li>Extract Publish Year</li>
-            <li>Extract Edition Count</li>
-            <li>Extract Language</li>
-            <li>Extract Publisher</li>
+            <li>Load comma-delimited numeric array data using NumPy's <span class="code-block">loadtxt</span> function</li>
+            <li>Slice diagnostic feature variables ($X$, columns $0$ to $7$) from binary target labels ($y$, column $8$)</li>
+            <li>Apply Scikit-Learn's <span class="code-block">train_test_split</span> with a 20% holdout test set and seed control (<span class="code-block">random_state=42</span>)</li>
+            <li>Initialize Keras <span class="code-block">Sequential</span> architecture with hidden dense layers utilizing ReLU activations</li>
         </ul>
 
-        <h3>💻 Code</h3>
-
+        <h3> Code</h3>
 <pre>
+from numpy import loadtxt
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from sklearn.model_selection import train_test_split
 
-Paste your code here
+# Load dataset using NumPy
+dataset = loadtxt("pima-indians-diabetes.csv", delimiter=",")
 
+# Slice features (X) and target label (y)
+x = dataset[:, 0:8]
+y = dataset[:, 8]
+
+# Partition into 80% training and 20% testing splits
+x_train, x_test, y_train, y_test = train_test_split(
+    x, y, test_size=0.20, random_state=42
+)
+
+# Initialize Sequential ANN Model Architecture
+model = Sequential()
+model.add(Dense(12, input_shape=(8,), activation='relu'))
+model.add(Dense(8, activation='relu'))
+model.add(Dense(1, activation='sigmoid'))
 </pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
     </section>
-
 
     <!-- Activity 2 -->
-
     <section class="card">
-
-        <h2>🖼 Activity 2 : Display Book Cover</h2>
-
+        <h2> Activity 2: Model Compilation, Iterative Training & Test Set Evaluation</h2>
         <p>
-            Briefly explain how cover_i was used to generate
-            the image URL.
+            Compile the multi-layer neural network with appropriate loss functions, train across multiple training epochs, and evaluate overall loss and prediction accuracy on unseen test data.
         </p>
 
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📷 Output / Screenshot</h3>
-
-        <div class="image-placeholder">
-
-            Paste Book Cover Screenshot Here
-
-        </div>
-
-    </section>
-
-
-    <!-- Activity 3 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 3 : REST Countries API</h2>
-
-        <p>
-            Describe how country data was fetched and organized.
-        </p>
-
-        <table border="1" cellpadding="10">
-
-            <tr>
-
-                <th>Extracted Fields</th>
-
-            </tr>
-
-            <tr><td>Country Name</td></tr>
-
-            <tr><td>Capital</td></tr>
-
-            <tr><td>Population</td></tr>
-
-            <tr><td>Area</td></tr>
-
-        </table>
-
-        <br>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 4 -->
-
-    <section class="card">
-
-        <h2>👥 Activity 4 : Countries with Population Greater Than 50 Million</h2>
-
-        <p>
-            Explain the filtering logic used in the program.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 5 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 5 : Filter Countries by Region</h2>
-
-        <p>
-            Explain how user input was taken and countries
-            belonging to the Africa region were displayed.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Key Learnings -->
-
-    <section class="card">
-
-        <h2>💡 Key Learnings</h2>
-
+        <h3>Tasks Performed</h3>
         <ul>
-
-            <li>Working with public REST APIs</li>
-
-            <li>JSON Parsing</li>
-
-            <li>Nested Dictionary Handling</li>
-
-            <li>Data Extraction</li>
-
-            <li>Conditional Filtering</li>
-
-            <li>Image Retrieval using API</li>
-
-            <li>Python Requests Library</li>
-
+            <li>Compile ANN model using <span class="code-block">binary_crossentropy</span> loss function suited for binary classification tasks</li>
+            <li>Attach <span class="code-block">Adam</span> adaptive learning rate optimizer and set tracking metric to <span class="code-block">accuracy</span></li>
+            <li>Fit model on training samples across $150$ epochs with a batch size of $10$</li>
+            <li>Evaluate model loss and accuracy performance on holdout test features using <span class="code-block">model.evaluate()</span></li>
         </ul>
 
+        <h3> Code</h3>
+<pre>
+# Compile model with loss function, optimizer, and metrics
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# Fit ANN model on training dataset
+model.fit(x_train, y_train, epochs=150, batch_size=10)
+
+# Evaluate performance metrics on holdout test set
+loss, accuracy = model.evaluate(x_test, y_test)
+
+# Display final test results
+print("\n--- Model Evaluation Results ---")
+print("Loss     : %.4f" % loss)
+print("Accuracy : %.2f%%" % (accuracy * 100))
+</pre>
     </section>
 
-
-    <!-- Reflection -->
-
+    <!-- Key Learnings -->
     <section class="card">
-
-        <h2>📝 Reflection</h2>
-
-        <p>
-
-            Write 5–6 lines describing your overall learning
-            experience, challenges faced, and how today's
-            activities improved your understanding of APIs.
-
-        </p>
-
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>Understanding the fundamentals of Artificial Neural Networks (ANN) and Multi-Layer Perceptrons (MLP)</li>
+            <li>Using Keras <span class="code-block">Sequential</span> models to layer dense fully connected (<span class="code-block">Dense</span>) network topologies</li>
+            <li>Applying <span class="code-block">ReLU</span> activation functions for internal hidden layers to prevent vanishing gradient problems, and <span class="code-block">Sigmoid</span> output activations for probability estimation</li>
+            <li>Understanding deep learning hyperparameters like <span class="code-block">epochs</span> (full dataset iterations) and <span class="code-block">batch_size</span> (samples per gradient update)</li>
+            <li>Configuring appropriate compilation parameters for binary outcome prediction using <span class="code-block">binary_crossentropy</span> and <span class="code-block">adam</span></li>
+        </ul>
     </section>
 
 </div>

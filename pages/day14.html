@@ -1,6 +1,5 @@
 <header>
-
-   <style>
+    <style>
         body{
             font-family: Arial, sans-serif;
             margin:0;
@@ -62,264 +61,178 @@
         }
     </style>
 
-
-    <h1>🌐 Day 3 - REST APIs & JSON Data Extraction</h1>
+    <h1> Day 14 - Regression Modeling & Advanced Classification Evaluation Metrics</h1>
     <p>Industrial Training Diary</p>
 </header>
 
 <div class="container">
 
     <!-- Introduction -->
-
     <section class="card">
-        <h2>📖 Introduction</h2>
-
+        <h2> Introduction</h2>
         <p>
-            Write 5–8 lines about what you learned today.
-            Mention REST APIs, JSON responses, Python requests,
-            extracting data, filtering information, and working with
-            book and country datasets.
+            On the fourteenth day of industrial training, I deepened my understanding of predictive machine learning workflows by tackling both continuous regression modeling and detailed classification evaluation. I implemented ensemble and tree-based regression models to predict numeric outcomes, measuring error rates via MAE, MSE, RMSE, and $R^2$ scores. Additionally, I explored supervised classification on heart disease diagnostic datasets using Support Vector Machines (SVM), evaluating model precision beyond standard accuracy metrics by measuring Precision, Recall, and $F_1$-score.
         </p>
     </section>
-
 
     <!-- Learning Objectives -->
-
     <section class="card">
-        <h2>🎯 Learning Objectives</h2>
-
+        <h2> Learning Objectives</h2>
         <ul>
-            <li>Understand REST APIs</li>
-            <li>Send HTTP requests using Python</li>
-            <li>Parse JSON responses</li>
-            <li>Extract required fields</li>
-            <li>Filter data using conditions</li>
-            <li>Retrieve images from APIs</li>
+            <li>Implement continuous variable prediction pipelines using Decision Trees, Support Vector Regressors, and Random Forests</li>
+            <li>Evaluate regression model performance using Mean Absolute Error (MAE), Mean Squared Error (MSE), Root Mean Squared Error (RMSE), and Coefficient of Determination ($R^2$)</li>
+            <li>Perform standardized dataset splitting using <span class="code-block">train_test_split</span> with seed reproducibility controls</li>
+            <li>Train Support Vector Classifiers (SVC) on medical diagnostic features</li>
+            <li>Analyze classification efficacy using detailed metrics: Accuracy, Precision, Recall, and $F_1$-score</li>
         </ul>
-
     </section>
-
 
     <!-- Activity 1 -->
-
     <section class="card">
-
-        <h2>📚 Activity 1 : Open Library API</h2>
-
+        <h2> Activity 1: Comparative Continuous Regression Analysis (Insurance Charges Dataset)</h2>
         <p>
-            Write 2–3 lines describing this activity.
+            Process numerical predictors from customer demographic data, shuffle observations, partition training-testing sets, and evaluate performance across multiple regression algorithms.
         </p>
 
-        <h3>Task Performed</h3>
-
+        <h3>Tasks Performed</h3>
         <ul>
-            <li>Search books using title</li>
-            <li>Extract Title</li>
-            <li>Extract Author</li>
-            <li>Extract Publish Year</li>
-            <li>Extract Edition Count</li>
-            <li>Extract Language</li>
-            <li>Extract Publisher</li>
+            <li>Separate target output labels (<span class="code-block">charges</span>) from predictor attributes</li>
+            <li>Perform random row index permutations to avoid data ordering bias</li>
+            <li>Fit Decision Tree, Support Vector, and Random Forest Regressors</li>
+            <li>Compute error distributions (MAE, MSE, RMSE) and variance metrics ($R^2$) across all models</li>
         </ul>
 
-        <h3>💻 Code</h3>
-
+        <h3> Code</h3>
 <pre>
+import pandas as pd
+import numpy as np
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.svm import SVR
+from sklearn.ensemble import RandomForestRegressor
 
-Paste your code here
+# Load dataset
+data = "insurance.csv"
+df = pd.read_csv(data)
 
+# Preprocessing: Isolate numeric predictors and target variable
+x = df.drop(columns={"charges", "sex", "smoker", "region"})
+y = df["charges"]
+
+# Randomly shuffle dataset indices
+indices = np.random.permutation(len(df))
+x = x.iloc[indices]
+y = y.iloc[indices]
+
+# Partition into 80% training and 20% testing splits
+split_index = int(len(df) * 0.80)
+x_train = x.iloc[:split_index]
+y_train = y.iloc[:split_index]
+x_test = x.iloc[split_index:]
+y_test = y.iloc[split_index:]
+
+# 1. Decision Tree Regressor
+dtr = DecisionTreeRegressor().fit(x_train, y_train)
+prediction = dtr.predict(x_test)
+mae = mean_absolute_error(y_test, prediction)
+mse = mean_squared_error(y_test, prediction)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, prediction)
+
+print("--- Decision Tree Regressor ---")
+print("Mean Absolute Error     :", mae)
+print("Mean Squared Error      :", mse)
+print("Root Mean Squared Error :", rmse)
+print("R2 Score                :", r2)
+
+# 2. Support Vector Regressor
+svr = SVR().fit(x_train, y_train)
+prediction = svr.predict(x_test)
+mae = mean_absolute_error(y_test, prediction)
+mse = mean_squared_error(y_test, prediction)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, prediction)
+
+print("\n--- Support Vector Regressor ---")
+print("Mean Absolute Error     :", mae)
+print("Mean Squared Error      :", mse)
+print("Root Mean Squared Error :", rmse)
+print("R2 Score                :", r2)
+
+# 3. Random Forest Regressor
+rfr = RandomForestRegressor().fit(x_train, y_train)
+prediction = rfr.predict(x_test)
+mae = mean_absolute_error(y_test, prediction)
+mse = mean_squared_error(y_test, prediction)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, prediction)
+
+print("\n--- Random Forest Regressor ---")
+print("Mean Absolute Error     :", mae)
+print("Mean Squared Error      :", mse)
+print("Root Mean Squared Error :", rmse)
+print("R2 Score                :", r2)
 </pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
     </section>
-
 
     <!-- Activity 2 -->
-
     <section class="card">
-
-        <h2>🖼 Activity 2 : Display Book Cover</h2>
-
+        <h2> Activity 2: Diagnostic Support Vector Classification & Metric Evaluation (Heart Disease Dataset)</h2>
         <p>
-            Briefly explain how cover_i was used to generate
-            the image URL.
+            Build a Support Vector Classifier (SVC) pipeline on heart disease diagnostic features and evaluate performance using comprehensive classification metrics.
         </p>
 
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📷 Output / Screenshot</h3>
-
-        <div class="image-placeholder">
-
-            Paste Book Cover Screenshot Here
-
-        </div>
-
-    </section>
-
-
-    <!-- Activity 3 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 3 : REST Countries API</h2>
-
-        <p>
-            Describe how country data was fetched and organized.
-        </p>
-
-        <table border="1" cellpadding="10">
-
-            <tr>
-
-                <th>Extracted Fields</th>
-
-            </tr>
-
-            <tr><td>Country Name</td></tr>
-
-            <tr><td>Capital</td></tr>
-
-            <tr><td>Population</td></tr>
-
-            <tr><td>Area</td></tr>
-
-        </table>
-
-        <br>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 4 -->
-
-    <section class="card">
-
-        <h2>👥 Activity 4 : Countries with Population Greater Than 50 Million</h2>
-
-        <p>
-            Explain the filtering logic used in the program.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 5 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 5 : Filter Countries by Region</h2>
-
-        <p>
-            Explain how user input was taken and countries
-            belonging to the Africa region were displayed.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Key Learnings -->
-
-    <section class="card">
-
-        <h2>💡 Key Learnings</h2>
-
+        <h3>Tasks Performed</h3>
         <ul>
-
-            <li>Working with public REST APIs</li>
-
-            <li>JSON Parsing</li>
-
-            <li>Nested Dictionary Handling</li>
-
-            <li>Data Extraction</li>
-
-            <li>Conditional Filtering</li>
-
-            <li>Image Retrieval using API</li>
-
-            <li>Python Requests Library</li>
-
+            <li>Partition diagnostic features and target labels using Scikit-Learn's <span class="code-block">train_test_split</span></li>
+            <li>Set explicit seed values (<span class="code-block">random_state=30</span>) to ensure consistent test results</li>
+            <li>Train a Support Vector Classifier (<span class="code-block">SVC</span>) on clinical training data</li>
+            <li>Calculate and analyze Accuracy, Precision, Recall, and $F_1$-score on test predictions</li>
         </ul>
 
+        <h3> Code</h3>
+<pre>
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn import svm
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# Load diagnostic dataset
+data = pd.read_csv("heart.csv")
+
+# Separate features and target binary variable
+x = data.drop(columns="target")
+y = data["target"]
+
+# Partition into 80:20 train-test split using reproducible seed state
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.20, random_state=30)
+
+# Initialize and train Support Vector Classifier
+model = svm.SVC()
+model.fit(x_train, y_train)
+
+# Predict target labels for testing subset
+prediction = model.predict(x_test)
+
+# Calculate diagnostic evaluation metrics
+print("--- Support Vector Classifier Performance ---")
+print("Accuracy  : ", accuracy_score(y_test, prediction))
+print("Precision : ", precision_score(y_test, prediction))
+print("Recall    : ", recall_score(y_test, prediction))
+print("F1 Score  : ", f1_score(y_test, prediction))
+</pre>
     </section>
 
-
-    <!-- Reflection -->
-
+    <!-- Key Learnings -->
     <section class="card">
-
-        <h2>📝 Reflection</h2>
-
-        <p>
-
-            Write 5–6 lines describing your overall learning
-            experience, challenges faced, and how today's
-            activities improved your understanding of APIs.
-
-        </p>
-
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>Understanding continuous prediction evaluation metrics ($MAE$, $MSE$, $RMSE$, and $R^2$) to assess regression fit accuracy</li>
+            <li>Observing performance variations between single decision trees, support vector regressors, and ensemble random forest models</li>
+            <li>Using Scikit-Learn's <span class="code-block">train_test_split</span> function with fixed <span class="code-block">random_state</span> values for reliable experimental setups</li>
+            <li>Evaluating binary classification models using Precision, Recall, and $F_1$-score alongside standard accuracy</li>
+            <li>Recognizing the importance of recall and precision in medical diagnostic applications where false negatives carry significant risks</li>
+        </ul>
     </section>
 
 </div>

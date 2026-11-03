@@ -1,6 +1,6 @@
-<header>
 
-   <style>
+<header>
+    <style>
         body{
             font-family: Arial, sans-serif;
             margin:0;
@@ -53,6 +53,13 @@
             margin:3px;
         }
 
+        .code-block{
+            background:#f4f4f4;
+            padding:2px 6px;
+            border-radius:4px;
+            font-family: monospace;
+        }
+
         a{
             display:inline-block;
             margin-top:20px;
@@ -62,264 +69,159 @@
         }
     </style>
 
-
-    <h1>🌐 Day 3 - REST APIs & JSON Data Extraction</h1>
+    <h1> Day 19 - Data Visualization & Line Plotting Mastery with Matplotlib</h1>
     <p>Industrial Training Diary</p>
 </header>
 
 <div class="container">
 
     <!-- Introduction -->
-
     <section class="card">
-        <h2>📖 Introduction</h2>
-
+        <h2> Introduction</h2>
         <p>
-            Write 5–8 lines about what you learned today.
-            Mention REST APIs, JSON responses, Python requests,
-            extracting data, filtering information, and working with
-            book and country datasets.
+            On the nineteenth day of industrial training, I deepened my data visualization capabilities using Python's <span class="code-block">matplotlib.pyplot</span> library. I implemented a broad set of line plotting exercises ranging from basic single-line visualizations and custom styled plots to multi-line trigonometric functions, file-based data plotting, financial time-series analysis with Pandas, and custom axis boundary controls.
         </p>
     </section>
-
 
     <!-- Learning Objectives -->
-
     <section class="card">
-        <h2>🎯 Learning Objectives</h2>
-
+        <h2> Learning Objectives</h2>
         <ul>
-            <li>Understand REST APIs</li>
-            <li>Send HTTP requests using Python</li>
-            <li>Parse JSON responses</li>
-            <li>Extract required fields</li>
-            <li>Filter data using conditions</li>
-            <li>Retrieve images from APIs</li>
+            <li>Build customized line plots using fundamental Matplotlib syntax (<span class="code-block">xlabel</span>, <span class="code-block">ylabel</span>, <span class="code-block">title</span>, <span class="code-block">grid</span>)</li>
+            <li>Incorporate visual styling properties including custom line colors, widths, dash styles, and marker configurations</li>
+            <li>Parse external text files (<span class="code-block">.txt</span>) to dynamically plot $X-Y$ coordinate pairs</li>
+            <li>Visualize financial market time-series datasets loaded from Pandas DataFrames with multi-attribute legends</li>
+            <li>Plot mathematical functions (Trigonometric $\sin$, $\cos$, $\tan$) and configure dynamic axis range limits (<span class="code-block">plt.axis()</span>)</li>
         </ul>
-
     </section>
-
 
     <!-- Activity 1 -->
-
     <section class="card">
-
-        <h2>📚 Activity 1 : Open Library API</h2>
-
+        <h2> Activity 1: File I/O Line Plotting & Financial Time-Series Visualization</h2>
         <p>
-            Write 2–3 lines describing this activity.
+            Extract coordinate data directly from external text files and plot financial stock prices across multiple attributes using Pandas data structure integration.
         </p>
 
-        <h3>Task Performed</h3>
-
+        <h3>Tasks Performed</h3>
         <ul>
-            <li>Search books using title</li>
-            <li>Extract Title</li>
-            <li>Extract Author</li>
-            <li>Extract Publish Year</li>
-            <li>Extract Edition Count</li>
-            <li>Extract Language</li>
-            <li>Extract Publisher</li>
+            <li>Parse space-delimited text records (<span class="code-block">test.txt</span>) to construct dynamic feature vectors</li>
+            <li>Load Alphabet Inc. stock market records (<span class="code-block">fdata.csv</span>) using Pandas DataFrames</li>
+            <li>Plot multi-variable stock metrics (Open, High, Low, Close) on shared time-series axes with automated legends</li>
+            <li>Apply grid overlays and custom marker parameters to highlight data inflection points</li>
         </ul>
 
-        <h3>💻 Code</h3>
-
+        <h3> Code</h3>
 <pre>
+import matplotlib.pyplot as plt
+import pandas as pd
 
-Paste your code here
+# Task 3: Read Line Plot Data from Text File
+x_file, y_file = [], []
 
+with open("test.txt", 'r') as file:
+    for line in file:
+        a, b = map(int, line.split())
+        x_file.append(a)
+        y_file.append(b)
+
+plt.figure()
+plt.plot(x_file, y_file, color='yellow', marker='o', markerfacecolor='red', markeredgecolor='green', linewidth=1)
+plt.xlabel("X Axis")
+plt.ylabel("Y Axis")
+plt.title("Data Read from Text File")
+plt.grid(True)
+plt.show()
+
+# Task 4: Plot Financial Market Time-Series Data
+df = pd.read_csv("fdata.csv", delimiter=',')
+
+dates = df["Date"]
+plt.figure()
+plt.plot(dates, df["Open"], label="Open")
+plt.plot(dates, df["Low"], label="Low")
+plt.plot(dates, df["High"], label="High")
+plt.plot(dates, df["Close"], label="Close")
+
+plt.xlabel("Dates")
+plt.ylabel("Price")
+plt.title("Financial Data of Alphabet Inc.")
+plt.legend()
+plt.grid(True)
+plt.show()
 </pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
     </section>
-
 
     <!-- Activity 2 -->
-
     <section class="card">
-
-        <h2>🖼 Activity 2 : Display Book Cover</h2>
-
+        <h2> Activity 2: Multi-Line Plotting, Trigonometric Functions & Axis Boundary Manipulation</h2>
         <p>
-            Briefly explain how cover_i was used to generate
-            the image URL.
+            Render multi-series mathematical curves on unified canvas figures, customize line dash styles, apply distinct point markers, and control plot boundary limits.
         </p>
 
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📷 Output / Screenshot</h3>
-
-        <div class="image-placeholder">
-
-            Paste Book Cover Screenshot Here
-
-        </div>
-
-    </section>
-
-
-    <!-- Activity 3 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 3 : REST Countries API</h2>
-
-        <p>
-            Describe how country data was fetched and organized.
-        </p>
-
-        <table border="1" cellpadding="10">
-
-            <tr>
-
-                <th>Extracted Fields</th>
-
-            </tr>
-
-            <tr><td>Country Name</td></tr>
-
-            <tr><td>Capital</td></tr>
-
-            <tr><td>Population</td></tr>
-
-            <tr><td>Area</td></tr>
-
-        </table>
-
-        <br>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 4 -->
-
-    <section class="card">
-
-        <h2>👥 Activity 4 : Countries with Population Greater Than 50 Million</h2>
-
-        <p>
-            Explain the filtering logic used in the program.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 5 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 5 : Filter Countries by Region</h2>
-
-        <p>
-            Explain how user input was taken and countries
-            belonging to the Africa region were displayed.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Key Learnings -->
-
-    <section class="card">
-
-        <h2>💡 Key Learnings</h2>
-
+        <h3>Tasks Performed</h3>
         <ul>
-
-            <li>Working with public REST APIs</li>
-
-            <li>JSON Parsing</li>
-
-            <li>Nested Dictionary Handling</li>
-
-            <li>Data Extraction</li>
-
-            <li>Conditional Filtering</li>
-
-            <li>Image Retrieval using API</li>
-
-            <li>Python Requests Library</li>
-
+            <li>Generate continuous numerical domains using NumPy's <span class="code-block">linspace</span></li>
+            <li>Plot trigonometric functions ($\sin$, $\cos$, $\tan$) with distinctive colors, line widths, and dash styles (<span class="code-block">linestyle='--'</span>, <span class="code-block">':'</span>)</li>
+            <li>Customize point marker geometries (<span class="code-block">'o'</span>, <span class="code-block">','</span>, <span class="code-block">'v'</span>) along with face and edge color fills</li>
+            <li>Inspect default axis bounding limits and override them dynamically using <span class="code-block">plt.axis([xmin, xmax, ymin, ymax])</span></li>
         </ul>
 
+        <h3> Code</h3>
+<pre>
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Task 5, 6 & 7: Multi-Line Mathematical Plotting with Styles
+x = np.linspace(0, 2 * np.pi, 100)
+
+plt.figure()
+plt.plot(x, np.sin(x), label="sin(x)", color='red', linewidth=2, linestyle=':')
+plt.plot(x, np.cos(x), label="cos(x)", color='cyan', linewidth=4, linestyle='--')
+plt.title("Trigonometric Curves with Custom Styles")
+plt.xlabel("Radians")
+plt.ylabel("Magnitude")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Task 8: Setting Line Markers across Multiple Curves
+x_vals = [i for i in range(0, 20)]
+y1 = [j for j in range(0, 40, 2)]
+y2 = [k for k in range(0, 60, 3)]
+y3 = [l for l in range(0, 80, 4)]
+
+plt.figure()
+plt.plot(x_vals, y1, marker='o', markerfacecolor='yellow', markeredgecolor='red', linestyle='--')
+plt.plot(x_vals, y2, marker=',', markerfacecolor='cyan', markeredgecolor='green', linestyle=':')
+plt.plot(x_vals, y3, marker='v', markerfacecolor='orange', markeredgecolor='brown', linestyle='-')
+plt.title("Custom Line Markers")
+plt.show()
+
+# Task 9: Display and Modify Axis Limits
+x_pts = [1, 2, 3, 4, 5]
+y_pts = [4, 2, 3, 1, 5]
+
+plt.figure()
+plt.plot(x_pts, y_pts)
+print("Current Default Axis Limits:", plt.axis())
+
+# Apply modified axis boundaries
+plt.axis([0, 7, 0, 7])
+plt.title("Plot with Custom Axis Limits [0, 7, 0, 7]")
+plt.show()
+</pre>
     </section>
 
-
-    <!-- Reflection -->
-
+    <!-- Key Learnings -->
     <section class="card">
-
-        <h2>📝 Reflection</h2>
-
-        <p>
-
-            Write 5–6 lines describing your overall learning
-            experience, challenges faced, and how today's
-            activities improved your understanding of APIs.
-
-        </p>
-
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>Structuring clean visualization code using core Matplotlib commands (<span class="code-block">plot</span>, <span class="code-block">xlabel</span>, <span class="code-block">ylabel</span>, <span class="code-block">title</span>, <span class="code-block">legend</span>)</li>
+            <li>Reading data from flat files (<span class="code-block">.txt</span>) and DataFrames (<span class="code-block">.csv</span>) for dynamic plot generation</li>
+            <li>Applying aesthetic customizations including custom colors, line widths (<span class="code-block">linewidth</span>), line styles (<span class="code-block">linestyle</span>), and point markers (<span class="code-block">marker</span>)</li>
+            <li>Plotting multi-series datasets on single figure canvases with color-coded legends</li>
+            <li>Inspecting and overriding default canvas boundaries using <span class="code-block">plt.axis()</span> to customize viewing frames</li>
+        </ul>
     </section>
 
 </div>

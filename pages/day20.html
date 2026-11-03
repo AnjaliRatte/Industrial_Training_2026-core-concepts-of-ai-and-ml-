@@ -1,6 +1,6 @@
-<header>
 
-   <style>
+<header>
+    <style>
         body{
             font-family: Arial, sans-serif;
             margin:0;
@@ -53,6 +53,13 @@
             margin:3px;
         }
 
+        .code-block{
+            background:#f4f4f4;
+            padding:2px 6px;
+            border-radius:4px;
+            font-family: monospace;
+        }
+
         a{
             display:inline-block;
             margin-top:20px;
@@ -62,264 +69,118 @@
         }
     </style>
 
-
-    <h1>🌐 Day 3 - REST APIs & JSON Data Extraction</h1>
+    <h1> Day 20 - Data Visualization: Pie Chart Generation & Customizations with Matplotlib</h1>
     <p>Industrial Training Diary</p>
 </header>
 
 <div class="container">
 
     <!-- Introduction -->
-
     <section class="card">
-        <h2>📖 Introduction</h2>
-
+        <h2> Introduction</h2>
         <p>
-            Write 5–8 lines about what you learned today.
-            Mention REST APIs, JSON responses, Python requests,
-            extracting data, filtering information, and working with
-            book and country datasets.
+            On the twentieth day of industrial training, I expanded my data visualization toolkit by focusing on proportional data representation using Matplotlib's pie chart capabilities. I implemented pie charts to display categorical proportions, customized chart aesthetics with percentage labels (<span class="code-block">autopct</span>), drop shadows, and wedge explosions (<span class="code-block">explode</span>). Additionally, I integrated Pandas to read real-world tabular data from flat CSV files to dynamically render Olympic medal distributions.
         </p>
     </section>
-
 
     <!-- Learning Objectives -->
-
     <section class="card">
-        <h2>🎯 Learning Objectives</h2>
-
+        <h2> Learning Objectives</h2>
         <ul>
-            <li>Understand REST APIs</li>
-            <li>Send HTTP requests using Python</li>
-            <li>Parse JSON responses</li>
-            <li>Extract required fields</li>
-            <li>Filter data using conditions</li>
-            <li>Retrieve images from APIs</li>
+            <li>Construct categorical proportion visualizations using <span class="code-block">plt.pie()</span></li>
+            <li>Format percentage values on pie wedges using the <span class="code-block">autopct</span> string formatter (<span class="code-block">%1.2f%%</span>)</li>
+            <li>Apply visual emphasis techniques such as wedge separation (<span class="code-block">explode</span>) and drop shadows (<span class="code-block">shadow=True</span>)</li>
+            <li>Incorporate visual context using figure titles (<span class="code-block">plt.title()</span>) and categorical labels</li>
+            <li>Read structured tabular data from CSV files using Pandas and extract columns using <span class="code-block">zip()</span> iteration for dynamic plotting</li>
         </ul>
-
     </section>
-
 
     <!-- Activity 1 -->
-
     <section class="card">
-
-        <h2>📚 Activity 1 : Open Library API</h2>
-
+        <h2> Activity 1: Categorical Programming Language Popularity Pie Charts</h2>
         <p>
-            Write 2–3 lines describing this activity.
+            Construct pie charts displaying programming language popularity, customize formatting options, and apply multi-wedge explosions to highlight specific data segments.
         </p>
 
-        <h3>Task Performed</h3>
-
+        <h3>Tasks Performed</h3>
         <ul>
-            <li>Search books using title</li>
-            <li>Extract Title</li>
-            <li>Extract Author</li>
-            <li>Extract Publish Year</li>
-            <li>Extract Edition Count</li>
-            <li>Extract Language</li>
-            <li>Extract Publisher</li>
+            <li>Define proportional numeric datasets and corresponding qualitative category labels</li>
+            <li>Render pie charts displaying formatted floating-point percentages up to two decimal places</li>
+            <li>Apply depth elevation shadows (<span class="code-block">shadow=True</span>) and standalone figure titles</li>
+            <li>Configure single-wedge and multi-wedge offset arrays (<span class="code-block">explode</span>) to visually emphasize key segments</li>
         </ul>
 
-        <h3>💻 Code</h3>
-
+        <h3> Code</h3>
 <pre>
+import matplotlib.pyplot as plt
 
-Paste your code here
+# Dataset: Programming Language Popularity
+popularity = [22.2, 17.6, 8.8, 8, 7.7, 6.7]
+pl = ['Java', 'Python', 'PHP', 'JavaScript', 'C#', 'C++']
 
+# 1. Basic Pie Chart with Single Wedge Explode & Shadows
+plt.figure()
+plt.pie(x=popularity, labels=pl, autopct='%1.2f%%', shadow=True, explode=[0.1, 0, 0, 0, 0, 0])
+plt.title("Popularity of Programming Languages (Single Explode)")
+plt.show()
+
+# 2. Pie Chart with Title and Multi-Wedge Explodes
+plt.figure()
+plt.pie(x=popularity, labels=pl, autopct='%1.2f%%', shadow=True, explode=[0.1, 0, 0, 0, 0, 0.1])
+plt.title("Popularity of Programming Languages (Multi Explode)")
+plt.show()
 </pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
     </section>
-
 
     <!-- Activity 2 -->
-
     <section class="card">
-
-        <h2>🖼 Activity 2 : Display Book Cover</h2>
-
+        <h2> Activity 2: Dynamic Pie Chart Generation from External CSV Data</h2>
         <p>
-            Briefly explain how cover_i was used to generate
-            the image URL.
+            Extract gold medal counts from an external Olympic dataset (<span class="code-block">medal.csv</span>) using Pandas and plot a dynamic, percentage-labeled pie chart.
         </p>
 
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📷 Output / Screenshot</h3>
-
-        <div class="image-placeholder">
-
-            Paste Book Cover Screenshot Here
-
-        </div>
-
-    </section>
-
-
-    <!-- Activity 3 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 3 : REST Countries API</h2>
-
-        <p>
-            Describe how country data was fetched and organized.
-        </p>
-
-        <table border="1" cellpadding="10">
-
-            <tr>
-
-                <th>Extracted Fields</th>
-
-            </tr>
-
-            <tr><td>Country Name</td></tr>
-
-            <tr><td>Capital</td></tr>
-
-            <tr><td>Population</td></tr>
-
-            <tr><td>Area</td></tr>
-
-        </table>
-
-        <br>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 4 -->
-
-    <section class="card">
-
-        <h2>👥 Activity 4 : Countries with Population Greater Than 50 Million</h2>
-
-        <p>
-            Explain the filtering logic used in the program.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 5 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 5 : Filter Countries by Region</h2>
-
-        <p>
-            Explain how user input was taken and countries
-            belonging to the Africa region were displayed.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Key Learnings -->
-
-    <section class="card">
-
-        <h2>💡 Key Learnings</h2>
-
+        <h3>Tasks Performed</h3>
         <ul>
-
-            <li>Working with public REST APIs</li>
-
-            <li>JSON Parsing</li>
-
-            <li>Nested Dictionary Handling</li>
-
-            <li>Data Extraction</li>
-
-            <li>Conditional Filtering</li>
-
-            <li>Image Retrieval using API</li>
-
-            <li>Python Requests Library</li>
-
+            <li>Load 2016 Summer Olympics gold medal data (<span class="code-block">medal.csv</span>) into a Pandas DataFrame</li>
+            <li>Extract country names and medal tallies into list structures using <span class="code-block">zip()</span> iteration</li>
+            <li>Render a customized pie chart displaying gold medal shares across top performing nations</li>
+            <li>Highlight the leading nation's sector by applying a focal offset (<span class="code-block">explode = [0.1, 0, 0, 0, 0]</span>)</li>
         </ul>
 
+        <h3> Code</h3>
+<pre>
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load Olympic Medal Dataset
+data = pd.read_csv("medal.csv")
+
+countries = []
+gold_medals = []
+
+# Extract data using zip iteration
+for c, g in zip(data["country"], data["gold_medal"]):
+    countries.append(c)
+    gold_medals.append(g)
+
+# Render Olympic Gold Medal Distribution Pie Chart
+plt.figure()
+plt.pie(x=gold_medals, labels=countries, autopct='%1.2f%%', shadow=True, explode=[0.1, 0, 0, 0, 0])
+plt.title("2016 Summer Olympics - Top 5 Gold Medal Distribution")
+plt.show()
+</pre>
     </section>
 
-
-    <!-- Reflection -->
-
+    <!-- Key Learnings -->
     <section class="card">
-
-        <h2>📝 Reflection</h2>
-
-        <p>
-
-            Write 5–6 lines describing your overall learning
-            experience, challenges faced, and how today's
-            activities improved your understanding of APIs.
-
-        </p>
-
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>Using Matplotlib's <span class="code-block">plt.pie()</span> function to illustrate proportional distributions</li>
+            <li>Formatting numeric sector labels automatically using string format specifiers like <span class="code-block">autopct='%1.2f%%'</span></li>
+            <li>Enhancing visual hierarchy using the <span class="code-block">explode</span> parameter to offset specific pie slices from the center</li>
+            <li>Adding visual depth using <span class="code-block">shadow=True</span> to make pie charts pop off the canvas</li>
+            <li>Iterating over Pandas DataFrame columns using <span class="code-block">zip()</span> to build dynamic input vectors for Matplotlib charts</li>
+        </ul>
     </section>
 
 </div>

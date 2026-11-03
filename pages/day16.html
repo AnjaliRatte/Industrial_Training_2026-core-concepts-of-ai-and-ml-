@@ -1,6 +1,5 @@
 <header>
-
-   <style>
+    <style>
         body{
             font-family: Arial, sans-serif;
             margin:0;
@@ -53,6 +52,13 @@
             margin:3px;
         }
 
+        .code-block{
+            background:#f4f4f4;
+            padding:2px 6px;
+            border-radius:4px;
+            font-family: monospace;
+        }
+
         a{
             display:inline-block;
             margin-top:20px;
@@ -62,264 +68,137 @@
         }
     </style>
 
-
-    <h1>🌐 Day 3 - REST APIs & JSON Data Extraction</h1>
+    <h1> Day 16 - Categorical Dataset Exploration, Label Encoding & Data Cleaning</h1>
     <p>Industrial Training Diary</p>
 </header>
 
 <div class="container">
 
     <!-- Introduction -->
-
     <section class="card">
-        <h2>📖 Introduction</h2>
-
+        <h2> Introduction</h2>
         <p>
-            Write 5–8 lines about what you learned today.
-            Mention REST APIs, JSON responses, Python requests,
-            extracting data, filtering information, and working with
-            book and country datasets.
+            On the sixteenth day of industrial training, I focused on end-to-end Exploratory Data Analysis (EDA) and data preprocessing for fully categorical datasets using the Mushroom Classification dataset. I performed structural exploration, missing value analysis, duplicate row checks, and label encoding using Scikit-Learn's <span class="code-block">LabelEncoder</span> to convert qualitative string features into numeric formats. Finally, I structured the data by partitioning predictor features from target labels and exporting the preprocessed dataset.
         </p>
     </section>
-
 
     <!-- Learning Objectives -->
-
     <section class="card">
-        <h2>🎯 Learning Objectives</h2>
-
+        <h2> Learning Objectives</h2>
         <ul>
-            <li>Understand REST APIs</li>
-            <li>Send HTTP requests using Python</li>
-            <li>Parse JSON responses</li>
-            <li>Extract required fields</li>
-            <li>Filter data using conditions</li>
-            <li>Retrieve images from APIs</li>
+            <li>Perform comprehensive initial EDA using Pandas (<span class="code-block">head</span>, <span class="code-block">tail</span>, <span class="code-block">shape</span>, <span class="code-block">columns</span>, and <span class="code-block">memory_usage</span>)</li>
+            <li>Analyze missing value distributions (<span class="code-block">isna().sum()</span>) and check record redundancy (<span class="code-block">duplicated()</span>)</li>
+            <li>Identify unique categories across categorical features using <span class="code-block">nunique()</span> and <span class="code-block">unique()</span></li>
+            <li>Distinguish categorical datasets from numerical ones by inspecting column data types programmatically</li>
+            <li>Encode non-numeric categorical attributes using Scikit-Learn's <span class="code-block">LabelEncoder</span> and save cleaned data to CSV</li>
         </ul>
-
     </section>
-
 
     <!-- Activity 1 -->
-
     <section class="card">
-
-        <h2>📚 Activity 1 : Open Library API</h2>
-
+        <h2> Activity 1: Dataset Loading, Structural Exploration & Health Checks</h2>
         <p>
-            Write 2–3 lines describing this activity.
+            Load the Mushroom dataset into pandas, inspect structural dimensions, evaluate memory usage, and verify data integrity by checking missing values and duplicate rows.
         </p>
 
-        <h3>Task Performed</h3>
-
+        <h3>Tasks Performed</h3>
         <ul>
-            <li>Search books using title</li>
-            <li>Extract Title</li>
-            <li>Extract Author</li>
-            <li>Extract Publish Year</li>
-            <li>Extract Edition Count</li>
-            <li>Extract Language</li>
-            <li>Extract Publisher</li>
+            <li>Load raw dataset (<span class="code-block">mushrooms.csv</span>) and display head/tail records and structural shape</li>
+            <li>Inspect data types, total column counts, and total memory footprint</li>
+            <li>Evaluate missing value counts across all features using <span class="code-block">isna().sum()</span></li>
+            <li>Detect and count potential duplicate observations across row indices</li>
+            <li>Analyze unique category distributions across all qualitative columns using loop iteration</li>
         </ul>
 
-        <h3>💻 Code</h3>
-
+        <h3> Code</h3>
 <pre>
+import pandas as pd
 
-Paste your code here
+# Task 1: Load the Dataset
+data = pd.read_csv("mushrooms.csv")
 
+print("--- Initial Inspection ---")
+print("First 5 Rows:\n", data.head())
+print("Last 5 Rows:\n", data.tail())
+print("Dataset Shape:", data.shape)
+print("Number of Columns:", data.shape[1])
+
+# Task 2 & 4: Dataset Exploration & Missing Value Analysis
+print("\n--- Structural Properties ---")
+print("Column Names:\n", data.columns)
+print("Data Types:\n", data.dtypes)
+print("Missing Values Per Column:\n", data.isna().sum())
+print("Total Duplicate Rows:", data.duplicated().sum())
+print("Memory Usage:\n", data.memory_usage())
+
+# Task 6: Unique Values Inspection
+print("\n--- Unique Categorical Values ---")
+for column in data.columns:
+    print(f"{column}: {data[column].unique()}")
+print("\nUnique Value Counts Per Column:\n", data.nunique())
 </pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
     </section>
-
 
     <!-- Activity 2 -->
-
     <section class="card">
-
-        <h2>🖼 Activity 2 : Display Book Cover</h2>
-
+        <h2> Activity 2: Categorical Feature Isolation, Label Encoding & Feature Splitting</h2>
         <p>
-            Briefly explain how cover_i was used to generate
-            the image URL.
+            Separate string/object features, transform qualitative categories into discrete numerical labels using <span class="code-block">LabelEncoder</span>, isolate predictor features from target labels, and export the cleaned dataset.
         </p>
 
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📷 Output / Screenshot</h3>
-
-        <div class="image-placeholder">
-
-            Paste Book Cover Screenshot Here
-
-        </div>
-
-    </section>
-
-
-    <!-- Activity 3 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 3 : REST Countries API</h2>
-
-        <p>
-            Describe how country data was fetched and organized.
-        </p>
-
-        <table border="1" cellpadding="10">
-
-            <tr>
-
-                <th>Extracted Fields</th>
-
-            </tr>
-
-            <tr><td>Country Name</td></tr>
-
-            <tr><td>Capital</td></tr>
-
-            <tr><td>Population</td></tr>
-
-            <tr><td>Area</td></tr>
-
-        </table>
-
-        <br>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 4 -->
-
-    <section class="card">
-
-        <h2>👥 Activity 4 : Countries with Population Greater Than 50 Million</h2>
-
-        <p>
-            Explain the filtering logic used in the program.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 5 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 5 : Filter Countries by Region</h2>
-
-        <p>
-            Explain how user input was taken and countries
-            belonging to the Africa region were displayed.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Key Learnings -->
-
-    <section class="card">
-
-        <h2>💡 Key Learnings</h2>
-
+        <h3>Tasks Performed</h3>
         <ul>
-
-            <li>Working with public REST APIs</li>
-
-            <li>JSON Parsing</li>
-
-            <li>Nested Dictionary Handling</li>
-
-            <li>Data Extraction</li>
-
-            <li>Conditional Filtering</li>
-
-            <li>Image Retrieval using API</li>
-
-            <li>Python Requests Library</li>
-
+            <li>Isolate categorical columns (<span class="code-block">object</span> / <span class="code-block">string</span>) programmatically from potential numeric features</li>
+            <li>Apply Scikit-Learn's <span class="code-block">LabelEncoder</span> iteratively across all categorical columns</li>
+            <li>Separate target output labels (<span class="code-block">class</span>) from predictor attributes (<span class="code-block">X</span>)</li>
+            <li>Export the encoded, clean dataset as <span class="code-block">mushroom_cleaned.csv</span> for model training</li>
         </ul>
 
+        <h3> Code</h3>
+<pre>
+from sklearn.preprocessing import LabelEncoder
+
+# Task 8: Identify Categorical Features
+categorical_columns = data.select_dtypes(include={"object", "string"})
+numerical_columns = data.select_dtypes(include=["int64", "float64"])
+
+print("Number of Categorical Columns:", categorical_columns.shape[1])
+print("Number of Numerical Columns:", numerical_columns.shape[1])
+
+# Task 9: Encode Categorical Features
+le = LabelEncoder()
+newdata = pd.DataFrame()
+
+for column in categorical_columns.columns:
+    newdata[column] = le.fit_transform(categorical_columns[column])
+
+print("\n--- Post-Encoding Inspection ---")
+print(newdata.head())
+print(newdata.dtypes)
+
+# Task 10: Separate Features and Target
+X = newdata.drop(columns="class")
+y = newdata["class"]
+
+print("\nFeatures (X) Shape:", X.shape)
+print("Target (y) Shape  :", y.shape)
+
+# Task 11: Save Cleaned Dataset
+newdata.to_csv("mushroom_cleaned.csv", index=False)
+print("\nCleaned dataset saved successfully as 'mushroom_cleaned.csv'.")
+</pre>
     </section>
 
-
-    <!-- Reflection -->
-
+    <!-- Key Learnings -->
     <section class="card">
-
-        <h2>📝 Reflection</h2>
-
-        <p>
-
-            Write 5–6 lines describing your overall learning
-            experience, challenges faced, and how today's
-            activities improved your understanding of APIs.
-
-        </p>
-
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>Understanding why non-numeric categorical attributes must be encoded before passing data into machine learning algorithms</li>
+            <li>Mastering <span class="code-block">LabelEncoder</span> for converting categorical string labels into discrete integer representations</li>
+            <li>Identifying fully categorical datasets where every feature represents nominal qualitative states rather than continuous numeric measurements</li>
+            <li>Executing standard data hygiene practices including duplicate detection, missing value auditing, and column data type isolation</li>
+            <li>Exporting cleaned data pipelines using <span class="code-block">to_csv(index=False)</span> to preserve processed state across machine learning workflows</li>
+        </ul>
     </section>
 
 </div>

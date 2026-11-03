@@ -1,6 +1,5 @@
 <header>
-
-   <style>
+    <style>
         body{
             font-family: Arial, sans-serif;
             margin:0;
@@ -53,6 +52,13 @@
             margin:3px;
         }
 
+        .code-block{
+            background:#f4f4f4;
+            padding:2px 6px;
+            border-radius:4px;
+            font-family: monospace;
+        }
+
         a{
             display:inline-block;
             margin-top:20px;
@@ -62,264 +68,157 @@
         }
     </style>
 
-
-    <h1>🌐 Day 3 - REST APIs & JSON Data Extraction</h1>
+    <h1> Day 15 - Categorical Data Encoding & Regression Pipeline Enhancement</h1>
     <p>Industrial Training Diary</p>
 </header>
 
 <div class="container">
 
     <!-- Introduction -->
-
     <section class="card">
-        <h2>📖 Introduction</h2>
-
+        <h2> Introduction</h2>
         <p>
-            Write 5–8 lines about what you learned today.
-            Mention REST APIs, JSON responses, Python requests,
-            extracting data, filtering information, and working with
-            book and country datasets.
+            On the fifteenth day of industrial training, I advanced my machine learning data preparation workflow by integrating categorical feature transformation into regression modeling. Rather than dropping non-numeric attributes, I utilized Scikit-Learn's <span class="code-block">OneHotEncoder</span> to convert qualitative variables into binary indicator vectors. I then re-evaluated continuous regression models (Decision Trees, Support Vector Regressors, and Random Forests) on the fully enriched dataset to analyze how categorical feature representation impacts predictive performance metrics.
         </p>
     </section>
-
 
     <!-- Learning Objectives -->
-
     <section class="card">
-        <h2>🎯 Learning Objectives</h2>
-
+        <h2> Learning Objectives</h2>
         <ul>
-            <li>Understand REST APIs</li>
-            <li>Send HTTP requests using Python</li>
-            <li>Parse JSON responses</li>
-            <li>Extract required fields</li>
-            <li>Filter data using conditions</li>
-            <li>Retrieve images from APIs</li>
+            <li>Handle non-numeric categorical predictors using Scikit-Learn's <span class="code-block">OneHotEncoder</span></li>
+            <li>Dynamically identify and isolate categorical features from pandas DataFrames using data types</li>
+            <li>Merge encoded binary features back into numerical datasets using pandas <span class="code-block">concat</span></li>
+            <li>Evaluate how categorical feature encoding affects regression algorithms like SVR, Decision Trees, and Random Forests</li>
+            <li>Analyze regression error distributions (MAE, MSE, RMSE, and $R^2$) on feature-engineered datasets</li>
         </ul>
-
     </section>
-
 
     <!-- Activity 1 -->
-
     <section class="card">
-
-        <h2>📚 Activity 1 : Open Library API</h2>
-
+        <h2> Activity 1: One-Hot Encoding Preprocessing & Data Pipeline Integration</h2>
         <p>
-            Write 2–3 lines describing this activity.
+            Implement automated categorical feature detection and one-hot encoding on the insurance dataset before partitioning training and test splits.
         </p>
 
-        <h3>Task Performed</h3>
-
+        <h3>Tasks Performed</h3>
         <ul>
-            <li>Search books using title</li>
-            <li>Extract Title</li>
-            <li>Extract Author</li>
-            <li>Extract Publish Year</li>
-            <li>Extract Edition Count</li>
-            <li>Extract Language</li>
-            <li>Extract Publisher</li>
+            <li>Isolate continuous target outputs (<span class="code-block">charges</span>) from predictor attributes</li>
+            <li>Detect qualitative categorical variables programmatically using string data type inspection</li>
+            <li>Apply <span class="code-block">OneHotEncoder(sparse_output=False)</span> to transform discrete categories into binary sparse-dense matrices</li>
+            <li>Reconstruct the dataset matrix by concatenating transformed feature arrays with original continuous numerical columns</li>
         </ul>
 
-        <h3>💻 Code</h3>
-
+        <h3> Code</h3>
 <pre>
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.svm import SVR
+from sklearn.ensemble import RandomForestRegressor
 
-Paste your code here
+# Load dataset
+data = "insurance.csv"
+df = pd.read_csv(data)
 
+# Preprocessing: Separate target output variable
+y = df["charges"]
+df = df.drop(columns="charges")
+
+# Dynamically select categorical columns and encode them
+categorical_columns = df.select_dtypes(include=['str']).columns
+encoder = OneHotEncoder(sparse_output=False)
+encoded_data = encoder.fit_transform(df[categorical_columns])
+
+# Create encoded DataFrame and merge with non-categorical features
+encoded_df = pd.DataFrame(encoded_data, columns=encoder.get_feature_names_out(categorical_columns))
+df = pd.concat([df.drop(columns=categorical_columns), encoded_df], axis=1)
+
+# Randomly permutation shuffle indices
+indices = np.random.permutation(len(df))
+
+# Partition into 80% training and 20% testing splits
+split_index = int(len(df) * 0.80)
+x_train = df.iloc[:split_index]
+y_train = y.iloc[:split_index]
+x_test = df.iloc[split_index:]
+y_test = y.iloc[split_index:]
 </pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
     </section>
-
 
     <!-- Activity 2 -->
-
     <section class="card">
-
-        <h2>🖼 Activity 2 : Display Book Cover</h2>
-
+        <h2> Activity 2: Comparative Evaluation on Encoded Feature Matrix</h2>
         <p>
-            Briefly explain how cover_i was used to generate
-            the image URL.
+            Fit regression models on the preprocessed, fully encoded feature set and analyze output accuracy metrics across multiple algorithms.
         </p>
 
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📷 Output / Screenshot</h3>
-
-        <div class="image-placeholder">
-
-            Paste Book Cover Screenshot Here
-
-        </div>
-
-    </section>
-
-
-    <!-- Activity 3 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 3 : REST Countries API</h2>
-
-        <p>
-            Describe how country data was fetched and organized.
-        </p>
-
-        <table border="1" cellpadding="10">
-
-            <tr>
-
-                <th>Extracted Fields</th>
-
-            </tr>
-
-            <tr><td>Country Name</td></tr>
-
-            <tr><td>Capital</td></tr>
-
-            <tr><td>Population</td></tr>
-
-            <tr><td>Area</td></tr>
-
-        </table>
-
-        <br>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 4 -->
-
-    <section class="card">
-
-        <h2>👥 Activity 4 : Countries with Population Greater Than 50 Million</h2>
-
-        <p>
-            Explain the filtering logic used in the program.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Activity 5 -->
-
-    <section class="card">
-
-        <h2>🌍 Activity 5 : Filter Countries by Region</h2>
-
-        <p>
-            Explain how user input was taken and countries
-            belonging to the Africa region were displayed.
-        </p>
-
-        <h3>💻 Code</h3>
-
-<pre>
-
-Paste your code here
-
-</pre>
-
-        <h3>📊 Output</h3>
-
-<pre>
-
-Paste your output here
-
-</pre>
-
-    </section>
-
-
-    <!-- Key Learnings -->
-
-    <section class="card">
-
-        <h2>💡 Key Learnings</h2>
-
+        <h3>Tasks Performed</h3>
         <ul>
-
-            <li>Working with public REST APIs</li>
-
-            <li>JSON Parsing</li>
-
-            <li>Nested Dictionary Handling</li>
-
-            <li>Data Extraction</li>
-
-            <li>Conditional Filtering</li>
-
-            <li>Image Retrieval using API</li>
-
-            <li>Python Requests Library</li>
-
+            <li>Train Decision Tree Regressor, Support Vector Regressor (SVR), and Random Forest Regressor models</li>
+            <li>Predict customer insurance charges on unseen test feature matrices</li>
+            <li>Calculate MAE, MSE, RMSE, and $R^2$ scores across all fitted regression algorithms</li>
+            <li>Compare performance improvements gained by retaining categorical features via One-Hot Encoding</li>
         </ul>
 
+        <h3> Code</h3>
+<pre>
+# 1. Decision Tree Regressor
+dtr = DecisionTreeRegressor().fit(x_train, y_train)
+prediction = dtr.predict(x_test)
+mae = mean_absolute_error(y_test, prediction)
+mse = mean_squared_error(y_test, prediction)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, prediction)
+
+print("--- Decision Tree Regressor ---")
+print("Mean Absolute Error     :", mae)
+print("Mean Squared Error      :", mse)
+print("Root Mean Squared Error :", rmse)
+print("R2 Score                :", r2)
+
+# 2. Support Vector Regressor
+svr = SVR().fit(x_train, y_train)
+prediction = svr.predict(x_test)
+mae = mean_absolute_error(y_test, prediction)
+mse = mean_squared_error(y_test, prediction)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, prediction)
+
+print("\n--- Support Vector Regressor ---")
+print("Mean Absolute Error     :", mae)
+print("Mean Squared Error      :", mse)
+print("Root Mean Squared Error :", rmse)
+print("R2 Score                :", r2)
+
+# 3. Random Forest Regressor
+rfr = RandomForestRegressor().fit(x_train, y_train)
+prediction = rfr.predict(x_test)
+mae = mean_absolute_error(y_test, prediction)
+mse = mean_squared_error(y_test, prediction)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, prediction)
+
+print("\n--- Random Forest Regressor ---")
+print("Mean Absolute Error     :", mae)
+print("Mean Squared Error      :", mse)
+print("Root Mean Squared Error :", rmse)
+print("R2 Score                :", r2)
+</pre>
     </section>
 
-
-    <!-- Reflection -->
-
+    <!-- Key Learnings -->
     <section class="card">
-
-        <h2>📝 Reflection</h2>
-
-        <p>
-
-            Write 5–6 lines describing your overall learning
-            experience, challenges faced, and how today's
-            activities improved your understanding of APIs.
-
-        </p>
-
+        <h2> Key Learnings</h2>
+        <ul>
+            <li>Recognizing why dropping categorical columns discards vital signals and how One-Hot Encoding preserves qualitative information</li>
+            <li>Mastering Scikit-Learn's <span class="code-block">OneHotEncoder</span> along with <span class="code-block">get_feature_names_out</span> to maintain clean feature column labeling</li>
+            <li>Combining transformed numpy output matrices back into pandas DataFrames using <span class="code-block">pd.concat</span></li>
+            <li>Observing how including encoded categorical data substantially improves variance explanation ($R^2$ score) in non-linear ensemble models like Random Forests</li>
+            <li>Understanding the practical end-to-end data processing workflow for real-world tabular machine learning pipelines</li>
+        </ul>
     </section>
 
 </div>
