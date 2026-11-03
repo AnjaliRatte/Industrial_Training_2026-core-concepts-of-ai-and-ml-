@@ -2,9 +2,11 @@ document.querySelectorAll(".card").forEach(card => {
 
     card.addEventListener("click", () => {
 
-        const page = card.dataset.page;
+    const page = card.dataset.page;
 
-        const routes = {
+    console.log("Clicked page:", page);
+
+    const routes = {
             day1: "./pages/day1.html",
             day2: "./pages/day2.html",
             day3: "./pages/day3.html",
@@ -18,6 +20,14 @@ document.querySelectorAll(".card").forEach(card => {
             day11: "./pages/day11.html",
             day12: "./pages/day12.html",
             day13: "./pages/day13.html",
+            day13: "./pages/day13.html",
+            day14: "./pages/day14.html",
+            day15: "./pages/day15.html",
+            day16: "./pages/day16.html",
+            day17: "./pages/day17.html",
+            day18: "./pages/day18.html",
+            day19: "./pages/day19.html",
+            day20: "./pages/day20.html",
             projects: "./pages/projects.html",
             report: "./pages/report.html",
             certificates: "./pages/certificates.html"
