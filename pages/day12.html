@@ -1,70 +1,96 @@
-<header>
 
-   <style>
-        body{
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 12 - Diabetes Dataset Analysis</title>
+
+    <style>
+        body {
             font-family: Arial, sans-serif;
-            margin:0;
-            padding:0;
+            margin: 0;
+            padding: 0;
             background: linear-gradient(135deg, #ffe6f0, #fff);
-            color:#333;
+            color: #333;
         }
 
-        header{
+        header {
             background: #ff4d88;
-            color:white;
-            padding:30px;
-            text-align:center;
+            color: white;
+            padding: 30px;
+            text-align: center;
         }
 
-        h1{
-            margin:0;
+        h1 {
+            margin: 0;
         }
 
-        .container{
-            padding:20px;
+        .container {
+            padding: 20px;
         }
 
-        .card{
-            background:white;
-            padding:20px;
-            margin:15px 0;
-            border-radius:15px;
-            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        h2{
-            color:#ff4d88;
+        h2 {
+            color: #ff4d88;
         }
 
-        pre{
-            background:#f4f4f4;
-            padding:15px;
-            border-radius:10px;
-            overflow-x:auto;
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+            white-space: pre;
         }
 
-        .tag{
-            display:inline-block;
-            background:#ff4d88;
-            color:white;
-            padding:5px 10px;
-            border-radius:20px;
-            font-size:12px;
-            margin:3px;
+        code {
+            font-family: Consolas, monospace;
         }
 
-        a{
-            display:inline-block;
-            margin-top:20px;
-            text-decoration:none;
-            color:#ff4d88;
-            font-weight:bold;
+        .tag {
+            display: inline-block;
+            background: #ff4d88;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 3px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #ff4d88;
+            font-weight: bold;
+        }
+
+        .image-placeholder {
+            background: #fff0f6;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #777;
         }
     </style>
+</head>
 
+<body>
 
-    <h1>🌐 Day 3 - REST APIs & JSON Data Extraction</h1>
+<header>
+    <h1>🩺 Day 12 - Diabetes Dataset Analysis</h1>
     <p>Industrial Training Diary</p>
+    <span class="tag">Pandas</span>
+    <span class="tag">NumPy</span>
+    <span class="tag">Scikit-learn</span>
+    <span class="tag">Dataset Splitting</span>
 </header>
 
 <div class="container">
@@ -75,13 +101,17 @@
         <h2>📖 Introduction</h2>
 
         <p>
-            Write 5–8 lines about what you learned today.
-            Mention REST APIs, JSON responses, Python requests,
-            extracting data, filtering information, and working with
-            book and country datasets.
+            Today, I worked with the Pima Indians Diabetes Dataset
+            to understand the process of preparing data for machine
+            learning. I loaded the dataset using Pandas and explored
+            its structure, dimensions, and column names. I also
+            studied missing values, duplicate records, and zero values
+            in selected medical features. Using NumPy, I shuffled
+            the dataset indices and separated the input features
+            from the target variable. Finally, I divided the dataset
+            into training and testing sets using an 80:20 ratio.
         </p>
     </section>
-
 
     <!-- Learning Objectives -->
 
@@ -89,237 +119,252 @@
         <h2>🎯 Learning Objectives</h2>
 
         <ul>
-            <li>Understand REST APIs</li>
-            <li>Send HTTP requests using Python</li>
-            <li>Parse JSON responses</li>
-            <li>Extract required fields</li>
-            <li>Filter data using conditions</li>
-            <li>Retrieve images from APIs</li>
+            <li>Load datasets using Pandas</li>
+            <li>Explore dataset shape and column names</li>
+            <li>Inspect data types and statistical summaries</li>
+            <li>Check missing values and duplicate records</li>
+            <li>Identify invalid zero values in medical features</li>
+            <li>Separate input features and target variables</li>
+            <li>Shuffle dataset indices using NumPy</li>
+            <li>Split data into training and testing sets</li>
         </ul>
-
     </section>
-
 
     <!-- Activity 1 -->
 
     <section class="card">
-
-        <h2>📚 Activity 1 : Open Library API</h2>
+        <h2>📊 Activity 1: Dataset Loading and Exploration</h2>
 
         <p>
-            Write 2–3 lines describing this activity.
+            I loaded the Pima Indians Diabetes Dataset directly
+            from GitHub using Pandas. I explored its dimensions,
+            column names, data types, statistical summaries,
+            missing values, and duplicate records.
         </p>
-
-        <h3>Task Performed</h3>
-
-        <ul>
-            <li>Search books using title</li>
-            <li>Extract Title</li>
-            <li>Extract Author</li>
-            <li>Extract Publish Year</li>
-            <li>Extract Edition Count</li>
-            <li>Extract Language</li>
-            <li>Extract Publisher</li>
-        </ul>
 
         <h3>💻 Code</h3>
 
-<pre>
+<pre><code>import pandas as pd
+from sklearn.metrics import accuracy_score
 
-Paste your code here
+data = pd.read_csv(
+    "https://raw.githubusercontent.com/npradaschnor/"
+    "Pima-Indians-Diabetes-Dataset/refs/heads/master/diabetes.csv"
+)
 
-</pre>
+print(data.shape)
+print(data.columns)
+
+# Dataset exploration
+# print(data.head())
+# print(data.tail())
+# print(data.dtypes)
+# print(data.describe())
+
+# Missing values
+# print(data.isnull().sum())
+
+# Duplicate records
+# print(data.duplicated().sum())</code></pre>
 
         <h3>📊 Output</h3>
 
-<pre>
+<pre><code>Dataset Shape: (768, 9)
 
-Paste your output here
+Columns:
+Pregnancies
+Glucose
+BloodPressure
+SkinThickness
+Insulin
+BMI
+DiabetesPedigreeFunction
+Age
+Outcome</code></pre>
 
-</pre>
-
+        <p>
+            The dataset contains 768 rows and 9 columns,
+            including 8 input features and 1 target variable.
+        </p>
     </section>
-
 
     <!-- Activity 2 -->
 
     <section class="card">
-
-        <h2>🖼 Activity 2 : Display Book Cover</h2>
+        <h2>🔍 Activity 2: Identifying Invalid Zero Values</h2>
 
         <p>
-            Briefly explain how cover_i was used to generate
-            the image URL.
+            I examined selected medical features to identify
+            zero values that may represent missing or invalid
+            measurements rather than actual observations.
         </p>
 
         <h3>💻 Code</h3>
 
-<pre>
+<pre><code>columns = [
+    "Glucose",
+    "BloodPressure",
+    "SkinThickness",
+    "Insulin",
+    "BMI"
+]
 
-Paste your code here
+for col in columns:
+    print(col, (data[col] == 0).sum())</code></pre>
 
-</pre>
+        <h3>📊 Output</h3>
 
-        <h3>📷 Output / Screenshot</h3>
-
-        <div class="image-placeholder">
-
-            Paste Book Cover Screenshot Here
-
-        </div>
-
+<pre><code>Zero values in selected medical features
+(Results obtained from dataset exploration)</code></pre>
     </section>
-
 
     <!-- Activity 3 -->
 
     <section class="card">
-
-        <h2>🌍 Activity 3 : REST Countries API</h2>
+        <h2>🧹 Activity 3: Handling Invalid Zero Values</h2>
 
         <p>
-            Describe how country data was fetched and organized.
+            I replaced zero values in selected medical features
+            with their respective median values. This helped
+            prepare the dataset for further machine learning
+            operations.
         </p>
-
-        <table border="1" cellpadding="10">
-
-            <tr>
-
-                <th>Extracted Fields</th>
-
-            </tr>
-
-            <tr><td>Country Name</td></tr>
-
-            <tr><td>Capital</td></tr>
-
-            <tr><td>Population</td></tr>
-
-            <tr><td>Area</td></tr>
-
-        </table>
-
-        <br>
 
         <h3>💻 Code</h3>
 
-<pre>
+<pre><code>for col in columns:
+    med = data[col].median()
+    data[col] = data[col].replace(0, med)
 
-Paste your code here
-
-</pre>
+# Verify replacement
+for col in columns:
+    print(col, (data[col] == 0).sum())</code></pre>
 
         <h3>📊 Output</h3>
 
-<pre>
+<pre><code>Verification of zero values
+after median replacement</code></pre>
 
-Paste your output here
-
-</pre>
-
+        <p>
+            Median imputation was applied to the selected
+            columns to reduce the effect of invalid zero values.
+        </p>
     </section>
-
 
     <!-- Activity 4 -->
 
     <section class="card">
-
-        <h2>👥 Activity 4 : Countries with Population Greater Than 50 Million</h2>
+        <h2>🧩 Activity 4: Separating Features and Target</h2>
 
         <p>
-            Explain the filtering logic used in the program.
+            I separated the dataset into input features (X)
+            and the target variable (y). The Outcome column
+            represents the diabetes classification label.
         </p>
 
         <h3>💻 Code</h3>
 
-<pre>
+<pre><code>x = data.drop("Outcome", axis=1)
+y = data["Outcome"]
 
-Paste your code here
-
-</pre>
+print(x.shape)
+print(y.shape)</code></pre>
 
         <h3>📊 Output</h3>
 
-<pre>
-
-Paste your output here
-
-</pre>
-
+<pre><code>Features Shape: (768, 8)
+Target Shape: (768,)</code></pre>
     </section>
-
 
     <!-- Activity 5 -->
 
     <section class="card">
-
-        <h2>🌍 Activity 5 : Filter Countries by Region</h2>
+        <h2>🔀 Activity 5: Training and Testing Split</h2>
 
         <p>
-            Explain how user input was taken and countries
-            belonging to the Africa region were displayed.
+            I shuffled the dataset indices using NumPy to
+            randomize the order of observations. I then split
+            the dataset into 80% training data and 20% testing
+            data to prepare for machine learning model training
+            and evaluation.
         </p>
 
         <h3>💻 Code</h3>
 
-<pre>
+<pre><code>import numpy as np
 
-Paste your code here
+indices = np.random.permutation(len(data))
 
-</pre>
+x = x.iloc[indices]
+y = y.iloc[indices]
+
+split_index = int(len(data) * 0.80)
+
+x_train = x.iloc[:split_index]
+y_train = y.iloc[:split_index]
+
+x_test = x.iloc[split_index:]
+y_test = y.iloc[split_index:]
+
+# Check dataset shapes
+print(x_train.shape, y_train.shape)
+print(x_test.shape, y_test.shape)
+
+# Inspect training and testing data
+# print(x_train.head(), y_train.head())
+# print(x_test.head(), y_test.head())</code></pre>
 
         <h3>📊 Output</h3>
 
-<pre>
+<pre><code>Training Features: (614, 8)
+Training Target:   (614,)
 
-Paste your output here
+Testing Features:  (154, 8)
+Testing Target:    (154,)</code></pre>
 
-</pre>
-
+        <p>
+            The dataset was divided into 614 training
+            observations and 154 testing observations.
+        </p>
     </section>
-
 
     <!-- Key Learnings -->
 
     <section class="card">
-
         <h2>💡 Key Learnings</h2>
 
         <ul>
-
-            <li>Working with public REST APIs</li>
-
-            <li>JSON Parsing</li>
-
-            <li>Nested Dictionary Handling</li>
-
-            <li>Data Extraction</li>
-
-            <li>Conditional Filtering</li>
-
-            <li>Image Retrieval using API</li>
-
-            <li>Python Requests Library</li>
-
+            <li>Dataset loading and exploration using Pandas</li>
+            <li>Understanding dataset dimensions and features</li>
+            <li>Identifying missing and invalid values</li>
+            <li>Median-based imputation</li>
+            <li>Feature-target separation</li>
+            <li>Random permutation using NumPy</li>
+            <li>Training and testing dataset preparation</li>
+            <li>Understanding the 80:20 split ratio</li>
         </ul>
-
     </section>
-
 
     <!-- Reflection -->
 
     <section class="card">
-
         <h2>📝 Reflection</h2>
 
         <p>
-
-            Write 5–6 lines describing your overall learning
-            experience, challenges faced, and how today's
-            activities improved your understanding of APIs.
-
+            Today's activity helped me understand the importance
+            of data preparation before training a machine learning
+            model. I learned how to explore a dataset, identify
+            invalid values, and handle them using median
+            imputation. I also gained practical experience in
+            separating features and target variables. Using NumPy,
+            I implemented random shuffling and manually performed
+            an 80:20 training-testing split. This activity
+            strengthened my understanding of the initial stages
+            of a machine learning workflow.
         </p>
-
     </section>
 
 </div>
+
+</body>
+</html>
