@@ -33,11 +33,8 @@ document.querySelectorAll(".card").forEach(card => {
             certificates: "./pages/certificates.html"
         };
 
-        if (routes[page]) {
             window.location.href = routes[page];
-        } else {
-            alert("Page not created yet 🚧");
-        }
+       
 
     });
 
